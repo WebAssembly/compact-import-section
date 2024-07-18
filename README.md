@@ -1,6 +1,18 @@
 [![CI for specs](https://github.com/WebAssembly/spec/actions/workflows/ci-spec.yml/badge.svg)](https://github.com/WebAssembly/spec/actions/workflows/ci-spec.yml)
 [![CI for interpreter & tests](https://github.com/WebAssembly/spec/actions/workflows/ci-interpreter.yml/badge.svg)](https://github.com/WebAssembly/spec/actions/workflows/ci-interpreter.yml)
 
+# Compact Import Section Proposal for WebAssembly
+
+This repository is a clone of [github.com/WebAssembly/spec/](https://github.com/WebAssembly/spec/).
+It is meant for discussion, prototype specification and implementation of a proposal to
+add support for a Ccompact Import Section to WebAssembly.
+
+* See the [overview](proposals/compact-import-section/Overview.md) for a summary of the proposal.
+
+* See the [modified spec](https://webassembly.github.io/compact-import-section/) for details.
+
+Original `README` from upstream repository follows...
+
 # spec
 
 This repository holds the sources for the WebAssembly draft specification
