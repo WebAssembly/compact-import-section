@@ -6,7 +6,7 @@
   <meta content="ED" name="w3c-status">
   <meta content="Bikeshed version 3f621ba99, updated Mon Jul 28 15:38:36 2025 -0700" name="generator">
   <link href="https://www.w3.org/TR/wasm-js-api-2/" rel="canonical">
-  <meta content="88beb71ec25709d0973e7ae174e1485abeb87dd3" name="revision">
+  <meta content="b83c90dcc587533f25c057a324212b5ca2ed5b06" name="revision">
   <meta content="dark light" name="color-scheme">
 <style>
 emu-const {
@@ -1207,7 +1207,7 @@ This mapping is used to ensure that, for a given <a data-link-type="dfn" href="h
      <li data-md>
       <p>Let <var>imports</var> be « ».</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate③">For each</a> (<var>moduleName</var>, <var>componentName</var>, <var>externtype</var>) of <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/appendix/embedding.html#embed-module-imports" id="ref-for-embed-module-imports②">module_imports</a>(<var>module</var>),</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate③">For each</a> (<var>moduleName</var>, <var>moduleImports</var>) of <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/appendix/embedding.html#embed-module-imports" id="ref-for-embed-module-imports②">module_imports</a>(<var>module</var>),</p>
       <ol>
        <li data-md>
         <p>If <var>builtinOrStringImports</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists">contains</a> <var>moduleName</var>,</p>
@@ -1215,7 +1215,7 @@ This mapping is used to ensure that, for a given <a data-link-type="dfn" href="h
          <li data-md>
           <p>Let <var>o</var> be <var>builtinOrStringImports</var>[<var>moduleName</var>].</p>
          <li data-md>
-          <p>If <var>o</var> <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#sec-object-type" id="ref-for-sec-object-type">is not an Object</a> or if <var>o</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①">does not contain</a> <var>componentName</var>,</p>
+          <p>If <var>o</var> <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#sec-object-type" id="ref-for-sec-object-type">is not an Object</a> or if <var>o</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①">does not contain</a> <var>itemName</var>,</p>
           <ol>
            <li data-md>
             <p>Set <var>o</var> to <a data-link-type="dfn" data-refhint-key="e09fca85" href="https://tc39.github.io/ecma262/#sec-returnifabrupt-shorthands" id="ref-for-sec-returnifabrupt-shorthands②">?</a> <a data-link-type="abstract-op" href="https://tc39.es/ecma262/multipage/abstract-operations.html#sec-get-o-p" id="ref-for-sec-get-o-p">Get</a>(<var>importObject</var>, <var>moduleName</var>).</p>
@@ -1228,112 +1228,116 @@ This mapping is used to ensure that, for a given <a data-link-type="dfn" href="h
           <p>Let <var>o</var> be <a data-link-type="dfn" data-refhint-key="e09fca85" href="https://tc39.github.io/ecma262/#sec-returnifabrupt-shorthands" id="ref-for-sec-returnifabrupt-shorthands③">?</a> <a data-link-type="abstract-op" href="https://tc39.es/ecma262/multipage/abstract-operations.html#sec-get-o-p" id="ref-for-sec-get-o-p①">Get</a>(<var>importObject</var>, <var>moduleName</var>).</p>
         </ol>
        <li data-md>
-        <p>If <var>o</var> <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#sec-object-type" id="ref-for-sec-object-type①">is not an Object</a>, throw a <code class="idl"><a data-link-type="idl" href="https://tc39.github.io/ecma262/#sec-native-error-types-used-in-this-standard-typeerror" id="ref-for-sec-native-error-types-used-in-this-standard-typeerror①">TypeError</a></code> exception.</p>
-       <li data-md>
-        <p>Let <var>v</var> be <a data-link-type="dfn" data-refhint-key="e09fca85" href="https://tc39.github.io/ecma262/#sec-returnifabrupt-shorthands" id="ref-for-sec-returnifabrupt-shorthands④">?</a> <a data-link-type="abstract-op" href="https://tc39.es/ecma262/multipage/abstract-operations.html#sec-get-o-p" id="ref-for-sec-get-o-p②">Get</a>(<var>o</var>, <var>componentName</var>).</p>
-       <li data-md>
-        <p>If <var>externtype</var> is of the form <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/syntax/types.html#external-types" id="ref-for-external-types">func</a> <var>functype</var>,</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate④">For each</a> (<var>itemName</var>, <var>externtype</var>) of <var>moduleImports</var>,</p>
         <ol>
          <li data-md>
-          <p>If <a data-link-type="abstract-op" href="https://tc39.es/ecma262/multipage/abstract-operations.html#sec-iscallable" id="ref-for-sec-iscallable">IsCallable</a>(<var>v</var>) is false, throw a <code class="idl"><a data-link-type="idl" href="#exceptiondef-linkerror" id="ref-for-exceptiondef-linkerror">LinkError</a></code> exception.</p>
+          <p>If <var>o</var> <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#sec-object-type" id="ref-for-sec-object-type①">is not an Object</a>, throw a <code class="idl"><a data-link-type="idl" href="https://tc39.github.io/ecma262/#sec-native-error-types-used-in-this-standard-typeerror" id="ref-for-sec-native-error-types-used-in-this-standard-typeerror①">TypeError</a></code> exception.</p>
          <li data-md>
-          <p>If <var>v</var> has a [[FunctionAddress]] internal slot, and therefore is an <a data-link-type="dfn" href="#exported-function" id="ref-for-exported-function①">Exported Function</a>,</p>
+          <p>Let <var>v</var> be <a data-link-type="dfn" data-refhint-key="e09fca85" href="https://tc39.github.io/ecma262/#sec-returnifabrupt-shorthands" id="ref-for-sec-returnifabrupt-shorthands④">?</a> <a data-link-type="abstract-op" href="https://tc39.es/ecma262/multipage/abstract-operations.html#sec-get-o-p" id="ref-for-sec-get-o-p②">Get</a>(<var>o</var>, <var>itemName</var>).</p>
+         <li data-md>
+          <p>If <var>externtype</var> is of the form <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/syntax/types.html#external-types" id="ref-for-external-types">func</a> <var>functype</var>,</p>
           <ol>
            <li data-md>
-            <p>Let <var>funcaddr</var> be the value of <var>v</var>’s [[FunctionAddress]] internal slot.</p>
-          </ol>
-         <li data-md>
-          <p>Otherwise,</p>
-          <ol>
+            <p>If <a data-link-type="abstract-op" href="https://tc39.es/ecma262/multipage/abstract-operations.html#sec-iscallable" id="ref-for-sec-iscallable">IsCallable</a>(<var>v</var>) is false, throw a <code class="idl"><a data-link-type="idl" href="#exceptiondef-linkerror" id="ref-for-exceptiondef-linkerror">LinkError</a></code> exception.</p>
            <li data-md>
-            <p><a data-link-type="dfn" href="#create-a-host-function" id="ref-for-create-a-host-function">Create a host function</a> from <var>v</var> and <var>functype</var>, and let <var>funcaddr</var> be the result.</p>
-           <li data-md>
-            <p>Let <var>index</var> be the number of external functions in <var>imports</var>. This value <var>index</var> is known as the <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="index-of-the-host-function">index of the host function</dfn> <var>funcaddr</var>.</p>
-          </ol>
-         <li data-md>
-          <p>Let <var>externfunc</var> be the <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval">external value</a> <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval①">func</a> <var>funcaddr</var>.</p>
-         <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append">Append</a> <var>externfunc</var> to <var>imports</var>.</p>
-        </ol>
-       <li data-md>
-        <p>If <var>externtype</var> is of the form <a data-link-type="dfn" data-refhint-key="82295e1c" href="https://webassembly.github.io/spec/core/syntax/types.html#external-types" id="ref-for-external-types①">global</a> <var>mut</var> <var>valtype</var>,</p>
-        <ol>
-         <li data-md>
-          <p>If <var>v</var> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements">implements</a> <code class="idl"><a data-link-type="idl" href="#global" id="ref-for-global①">Global</a></code>,</p>
-          <ol>
-           <li data-md>
-            <p>Let <var>globaladdr</var> be <var>v</var>.[[Global]].</p>
-          </ol>
-         <li data-md>
-          <p>Otherwise,</p>
-          <ol>
-           <li data-md>
-            <p>If <var>valtype</var> is <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/syntax/types.html#syntax-numtype" id="ref-for-syntax-numtype">i64</a> and <var>v</var> <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#sec-ecmascript-language-types-bigint-type" id="ref-for-sec-ecmascript-language-types-bigint-type">is not a BigInt</a>,</p>
+            <p>If <var>v</var> has a [[FunctionAddress]] internal slot, and therefore is an <a data-link-type="dfn" href="#exported-function" id="ref-for-exported-function①">Exported Function</a>,</p>
             <ol>
              <li data-md>
-              <p>Throw a <code class="idl"><a data-link-type="idl" href="#exceptiondef-linkerror" id="ref-for-exceptiondef-linkerror①">LinkError</a></code> exception.</p>
+              <p>Let <var>funcaddr</var> be the value of <var>v</var>’s [[FunctionAddress]] internal slot.</p>
             </ol>
            <li data-md>
-            <p>If <var>valtype</var> is one of <a data-link-type="dfn" data-refhint-key="1eccdce5" href="https://webassembly.github.io/spec/core/syntax/types.html#syntax-numtype" id="ref-for-syntax-numtype①">i32</a>, <a data-link-type="dfn" data-refhint-key="a4646532" href="https://webassembly.github.io/spec/core/syntax/types.html#syntax-numtype" id="ref-for-syntax-numtype②">f32</a> or <a data-link-type="dfn" data-refhint-key="487b76fe" href="https://webassembly.github.io/spec/core/syntax/types.html#syntax-numtype" id="ref-for-syntax-numtype③">f64</a> and <var>v</var> <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#sec-ecmascript-language-types-number-type" id="ref-for-sec-ecmascript-language-types-number-type">is not a Number</a>,</p>
+            <p>Otherwise,</p>
             <ol>
              <li data-md>
-              <p>Throw a <code class="idl"><a data-link-type="idl" href="#exceptiondef-linkerror" id="ref-for-exceptiondef-linkerror②">LinkError</a></code> exception.</p>
-            </ol>
-           <li data-md>
-            <p>If <var>valtype</var> is <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/syntax/types.html#vector-types" id="ref-for-vector-types">v128</a>,</p>
-            <ol>
+              <p><a data-link-type="dfn" href="#create-a-host-function" id="ref-for-create-a-host-function">Create a host function</a> from <var>v</var> and <var>functype</var>, and let <var>funcaddr</var> be the result.</p>
              <li data-md>
-              <p>Throw a <code class="idl"><a data-link-type="idl" href="#exceptiondef-linkerror" id="ref-for-exceptiondef-linkerror③">LinkError</a></code> exception.</p>
+              <p>Let <var>index</var> be the number of external functions in <var>imports</var>. This value <var>index</var> is known as the <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="index-of-the-host-function">index of the host function</dfn> <var>funcaddr</var>.</p>
             </ol>
            <li data-md>
-            <p>Let <var>value</var> be <a data-link-type="dfn" href="#towebassemblyvalue" id="ref-for-towebassemblyvalue">ToWebAssemblyValue</a>(<var>v</var>, <var>valtype</var>). If this operation throws a <code class="idl"><a data-link-type="idl" href="https://tc39.github.io/ecma262/#sec-native-error-types-used-in-this-standard-typeerror" id="ref-for-sec-native-error-types-used-in-this-standard-typeerror②">TypeError</a></code>, catch it, and throw a <code class="idl"><a data-link-type="idl" href="#exceptiondef-linkerror" id="ref-for-exceptiondef-linkerror④">LinkError</a></code> exception.</p>
+            <p>Let <var>externfunc</var> be the <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval">external value</a> <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval①">func</a> <var>funcaddr</var>.</p>
            <li data-md>
-            <p>Let <var>store</var> be the <a data-link-type="dfn" href="https://tc39.es/ecma262/multipage/executable-code-and-execution-contexts.html#surrounding-agent" id="ref-for-surrounding-agent">surrounding agent</a>’s <a data-link-type="dfn" href="#associated-store" id="ref-for-associated-store">associated store</a>.</p>
-           <li data-md>
-            <p>Let (<var>store</var>, <var>globaladdr</var>) be <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/appendix/embedding.html#embed-global-alloc" id="ref-for-embed-global-alloc">global_alloc</a>(<var>store</var>, <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/syntax/types.html#syntax-mut" id="ref-for-syntax-mut">const</a> <var>valtype</var>, <var>value</var>).</p>
-           <li data-md>
-            <p>Set the <a data-link-type="dfn" href="https://tc39.es/ecma262/multipage/executable-code-and-execution-contexts.html#surrounding-agent" id="ref-for-surrounding-agent①">surrounding agent</a>’s <a data-link-type="dfn" href="#associated-store" id="ref-for-associated-store①">associated store</a> to <var>store</var>.</p>
+            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append">Append</a> <var>externfunc</var> to <var>imports</var>.</p>
           </ol>
          <li data-md>
-          <p>Let <var>externglobal</var> be <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval②">global</a> <var>globaladdr</var>.</p>
+          <p>If <var>externtype</var> is of the form <a data-link-type="dfn" data-refhint-key="82295e1c" href="https://webassembly.github.io/spec/core/syntax/types.html#external-types" id="ref-for-external-types①">global</a> <var>mut</var> <var>valtype</var>,</p>
+          <ol>
+           <li data-md>
+            <p>If <var>v</var> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements">implements</a> <code class="idl"><a data-link-type="idl" href="#global" id="ref-for-global①">Global</a></code>,</p>
+            <ol>
+             <li data-md>
+              <p>Let <var>globaladdr</var> be <var>v</var>.[[Global]].</p>
+            </ol>
+           <li data-md>
+            <p>Otherwise,</p>
+            <ol>
+             <li data-md>
+              <p>If <var>valtype</var> is <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/syntax/types.html#syntax-numtype" id="ref-for-syntax-numtype">i64</a> and <var>v</var> <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#sec-ecmascript-language-types-bigint-type" id="ref-for-sec-ecmascript-language-types-bigint-type">is not a BigInt</a>,</p>
+              <ol>
+               <li data-md>
+                <p>Throw a <code class="idl"><a data-link-type="idl" href="#exceptiondef-linkerror" id="ref-for-exceptiondef-linkerror①">LinkError</a></code> exception.</p>
+              </ol>
+             <li data-md>
+              <p>If <var>valtype</var> is one of <a data-link-type="dfn" data-refhint-key="1eccdce5" href="https://webassembly.github.io/spec/core/syntax/types.html#syntax-numtype" id="ref-for-syntax-numtype①">i32</a>, <a data-link-type="dfn" data-refhint-key="a4646532" href="https://webassembly.github.io/spec/core/syntax/types.html#syntax-numtype" id="ref-for-syntax-numtype②">f32</a> or <a data-link-type="dfn" data-refhint-key="487b76fe" href="https://webassembly.github.io/spec/core/syntax/types.html#syntax-numtype" id="ref-for-syntax-numtype③">f64</a> and <var>v</var> <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#sec-ecmascript-language-types-number-type" id="ref-for-sec-ecmascript-language-types-number-type">is not a Number</a>,</p>
+              <ol>
+               <li data-md>
+                <p>Throw a <code class="idl"><a data-link-type="idl" href="#exceptiondef-linkerror" id="ref-for-exceptiondef-linkerror②">LinkError</a></code> exception.</p>
+              </ol>
+             <li data-md>
+              <p>If <var>valtype</var> is <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/syntax/types.html#vector-types" id="ref-for-vector-types">v128</a>,</p>
+              <ol>
+               <li data-md>
+                <p>Throw a <code class="idl"><a data-link-type="idl" href="#exceptiondef-linkerror" id="ref-for-exceptiondef-linkerror③">LinkError</a></code> exception.</p>
+              </ol>
+             <li data-md>
+              <p>Let <var>value</var> be <a data-link-type="dfn" href="#towebassemblyvalue" id="ref-for-towebassemblyvalue">ToWebAssemblyValue</a>(<var>v</var>, <var>valtype</var>). If this operation throws a <code class="idl"><a data-link-type="idl" href="https://tc39.github.io/ecma262/#sec-native-error-types-used-in-this-standard-typeerror" id="ref-for-sec-native-error-types-used-in-this-standard-typeerror②">TypeError</a></code>, catch it, and throw a <code class="idl"><a data-link-type="idl" href="#exceptiondef-linkerror" id="ref-for-exceptiondef-linkerror④">LinkError</a></code> exception.</p>
+             <li data-md>
+              <p>Let <var>store</var> be the <a data-link-type="dfn" href="https://tc39.es/ecma262/multipage/executable-code-and-execution-contexts.html#surrounding-agent" id="ref-for-surrounding-agent">surrounding agent</a>’s <a data-link-type="dfn" href="#associated-store" id="ref-for-associated-store">associated store</a>.</p>
+             <li data-md>
+              <p>Let (<var>store</var>, <var>globaladdr</var>) be <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/appendix/embedding.html#embed-global-alloc" id="ref-for-embed-global-alloc">global_alloc</a>(<var>store</var>, <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/syntax/types.html#syntax-mut" id="ref-for-syntax-mut">const</a> <var>valtype</var>, <var>value</var>).</p>
+             <li data-md>
+              <p>Set the <a data-link-type="dfn" href="https://tc39.es/ecma262/multipage/executable-code-and-execution-contexts.html#surrounding-agent" id="ref-for-surrounding-agent①">surrounding agent</a>’s <a data-link-type="dfn" href="#associated-store" id="ref-for-associated-store①">associated store</a> to <var>store</var>.</p>
+            </ol>
+           <li data-md>
+            <p>Let <var>externglobal</var> be <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval②">global</a> <var>globaladdr</var>.</p>
+           <li data-md>
+            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①">Append</a> <var>externglobal</var> to <var>imports</var>.</p>
+          </ol>
          <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①">Append</a> <var>externglobal</var> to <var>imports</var>.</p>
-        </ol>
-       <li data-md>
-        <p>If <var>externtype</var> is of the form <a data-link-type="dfn" data-refhint-key="2be47a22" href="https://webassembly.github.io/spec/core/syntax/types.html#external-types" id="ref-for-external-types②">mem</a> <var>memtype</var>,</p>
-        <ol>
+          <p>If <var>externtype</var> is of the form <a data-link-type="dfn" data-refhint-key="2be47a22" href="https://webassembly.github.io/spec/core/syntax/types.html#external-types" id="ref-for-external-types②">mem</a> <var>memtype</var>,</p>
+          <ol>
+           <li data-md>
+            <p>If <var>v</var> does not <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements①">implement</a> <code class="idl"><a data-link-type="idl" href="#memory" id="ref-for-memory②">Memory</a></code>, throw a <code class="idl"><a data-link-type="idl" href="#exceptiondef-linkerror" id="ref-for-exceptiondef-linkerror⑤">LinkError</a></code> exception.</p>
+           <li data-md>
+            <p>Let <var>externmem</var> be the <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval③">external value</a> <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval④">mem</a> <var>v</var>.[[Memory]].</p>
+           <li data-md>
+            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append②">Append</a> <var>externmem</var> to <var>imports</var>.</p>
+          </ol>
          <li data-md>
-          <p>If <var>v</var> does not <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements①">implement</a> <code class="idl"><a data-link-type="idl" href="#memory" id="ref-for-memory②">Memory</a></code>, throw a <code class="idl"><a data-link-type="idl" href="#exceptiondef-linkerror" id="ref-for-exceptiondef-linkerror⑤">LinkError</a></code> exception.</p>
+          <p>If <var>externtype</var> is of the form <a data-link-type="dfn" data-refhint-key="eb9c1b7f" href="https://webassembly.github.io/spec/core/syntax/types.html#external-types" id="ref-for-external-types③">table</a> <var>tabletype</var>,</p>
+          <ol>
+           <li data-md>
+            <p>If <var>v</var> does not <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements②">implement</a> <code class="idl"><a data-link-type="idl" href="#table" id="ref-for-table①">Table</a></code>, throw a <code class="idl"><a data-link-type="idl" href="#exceptiondef-linkerror" id="ref-for-exceptiondef-linkerror⑥">LinkError</a></code> exception.</p>
+           <li data-md>
+            <p>Let <var>tableaddr</var> be <var>v</var>.[[Table]].</p>
+           <li data-md>
+            <p>Let <var>externtable</var> be the <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval⑤">external value</a> <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval⑥">table</a> <var>tableaddr</var>.</p>
+           <li data-md>
+            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append③">Append</a> <var>externtable</var> to <var>imports</var>.</p>
+          </ol>
          <li data-md>
-          <p>Let <var>externmem</var> be the <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval③">external value</a> <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval④">mem</a> <var>v</var>.[[Memory]].</p>
-         <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append②">Append</a> <var>externmem</var> to <var>imports</var>.</p>
-        </ol>
-       <li data-md>
-        <p>If <var>externtype</var> is of the form <a data-link-type="dfn" data-refhint-key="eb9c1b7f" href="https://webassembly.github.io/spec/core/syntax/types.html#external-types" id="ref-for-external-types③">table</a> <var>tabletype</var>,</p>
-        <ol>
-         <li data-md>
-          <p>If <var>v</var> does not <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements②">implement</a> <code class="idl"><a data-link-type="idl" href="#table" id="ref-for-table①">Table</a></code>, throw a <code class="idl"><a data-link-type="idl" href="#exceptiondef-linkerror" id="ref-for-exceptiondef-linkerror⑥">LinkError</a></code> exception.</p>
-         <li data-md>
-          <p>Let <var>tableaddr</var> be <var>v</var>.[[Table]].</p>
-         <li data-md>
-          <p>Let <var>externtable</var> be the <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval⑤">external value</a> <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval⑥">table</a> <var>tableaddr</var>.</p>
-         <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append③">Append</a> <var>externtable</var> to <var>imports</var>.</p>
-        </ol>
-       <li data-md>
-        <p>If <var>externtype</var> is of the form <a data-link-type="dfn" data-refhint-key="a5c9608b" href="https://webassembly.github.io/spec/core/syntax/types.html#external-types" id="ref-for-external-types④">tag</a> <var>attribute</var> <var>functype</var>,</p>
-        <ol>
-         <li data-md>
-          <p class="assertion">Assert: <var>attribute</var> is <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/syntax/types.html#syntax-tagtype" id="ref-for-syntax-tagtype">exception</a>.</p>
-         <li data-md>
-          <p>If <var>v</var> does not <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements③">implement</a> <code class="idl"><a data-link-type="idl" href="#tag" id="ref-for-tag②">Tag</a></code>, throw a <code class="idl"><a data-link-type="idl" href="#exceptiondef-linkerror" id="ref-for-exceptiondef-linkerror⑦">LinkError</a></code> exception.</p>
-         <li data-md>
-          <p>Let <var>tagaddr</var> be <var>v</var>.[[Address]].</p>
-         <li data-md>
-          <p>Let <var>externtag</var> be the <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval⑦">external value</a> <a data-link-type="dfn" data-refhint-key="c77be4cb" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval⑧">tag</a> <var>tagaddr</var>.</p>
-         <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append④">Append</a> <var>externtag</var> to <var>imports</var>.</p>
+          <p>If <var>externtype</var> is of the form <a data-link-type="dfn" data-refhint-key="a5c9608b" href="https://webassembly.github.io/spec/core/syntax/types.html#external-types" id="ref-for-external-types④">tag</a> <var>attribute</var> <var>functype</var>,</p>
+          <ol>
+           <li data-md>
+            <p class="assertion">Assert: <var>attribute</var> is <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/syntax/types.html#syntax-tagtype" id="ref-for-syntax-tagtype">exception</a>.</p>
+           <li data-md>
+            <p>If <var>v</var> does not <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#implements" id="ref-for-implements③">implement</a> <code class="idl"><a data-link-type="idl" href="#tag" id="ref-for-tag②">Tag</a></code>, throw a <code class="idl"><a data-link-type="idl" href="#exceptiondef-linkerror" id="ref-for-exceptiondef-linkerror⑦">LinkError</a></code> exception.</p>
+           <li data-md>
+            <p>Let <var>tagaddr</var> be <var>v</var>.[[Address]].</p>
+           <li data-md>
+            <p>Let <var>externtag</var> be the <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval⑦">external value</a> <a data-link-type="dfn" data-refhint-key="c77be4cb" href="https://webassembly.github.io/spec/core/exec/runtime.html#syntax-externval" id="ref-for-syntax-externval⑧">tag</a> <var>tagaddr</var>.</p>
+           <li data-md>
+            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append④">Append</a> <var>externtag</var> to <var>imports</var>.</p>
+          </ol>
         </ol>
       </ol>
      <li data-md>
@@ -1351,7 +1355,7 @@ The verification of WebAssembly type requirements is deferred to the
      <li data-md>
       <p>Let <var>exportsObject</var> be <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#sec-returnifabrupt-shorthands" id="ref-for-sec-returnifabrupt-shorthands⑤">!</a> <a data-link-type="abstract-op" href="https://tc39.es/ecma262/multipage/ordinary-and-exotic-objects-behaviours.html#sec-ordinaryobjectcreate" id="ref-for-sec-ordinaryobjectcreate①">OrdinaryObjectCreate</a>(null).</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate④">For each</a> (<var>name</var>, <var>externtype</var>) of <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/appendix/embedding.html#embed-module-exports" id="ref-for-embed-module-exports">module_exports</a>(<var>module</var>),</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑤">For each</a> (<var>name</var>, <var>externtype</var>) of <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/appendix/embedding.html#embed-module-exports" id="ref-for-embed-module-exports">module_exports</a>(<var>module</var>),</p>
       <ol>
        <li data-md>
         <p>Let <var>externval</var> be <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/appendix/embedding.html#embed-instance-export" id="ref-for-embed-instance-export">instance_export</a>(<var>instance</var>, <var>name</var>).</p>
@@ -1652,7 +1656,7 @@ If this throws an exception, catch it, <a data-link-type="dfn" href="https://web
      <li data-md>
       <p>Let <var>exports</var> be « ».</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑤">For each</a> (<var>name</var>, <var>type</var>) of <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/appendix/embedding.html#embed-module-exports" id="ref-for-embed-module-exports①">module_exports</a>(<var>module</var>),</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑥">For each</a> (<var>name</var>, <var>type</var>) of <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/appendix/embedding.html#embed-module-exports" id="ref-for-embed-module-exports①">module_exports</a>(<var>module</var>),</p>
       <ol>
        <li data-md>
         <p>Let <var>kind</var> be the <a data-link-type="dfn" href="#string-value-of-the-extern-type" id="ref-for-string-value-of-the-extern-type">string value of the extern type</a> <var>type</var>.</p>
@@ -1679,7 +1683,7 @@ If this throws an exception, catch it, <a data-link-type="dfn" href="https://web
      <li data-md>
       <p>Let <var>imports</var> be « ».</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑥">For each</a> (<var>moduleName</var>, <var>name</var>, <var>type</var>) of <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/appendix/embedding.html#embed-module-imports" id="ref-for-embed-module-imports③">module_imports</a>(<var>module</var>),</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑦">For each</a> (<var>moduleName</var>, <var>name</var>, <var>type</var>) of <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/appendix/embedding.html#embed-module-imports" id="ref-for-embed-module-imports③">module_imports</a>(<var>module</var>),</p>
       <ol>
        <li data-md>
         <p>If <a data-link-type="dfn" href="#find-a-builtin" id="ref-for-find-a-builtin">find a builtin</a> for (<var>moduleName</var>, <var>name</var>, <var>type</var>) and <var>builtinSetNames</var> is not null, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue②">continue</a>.</p>
@@ -1706,7 +1710,7 @@ If this throws an exception, catch it, <a data-link-type="dfn" href="https://web
      <li data-md>
       <p>Let <var>customSections</var> be « ».</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑦">For each</a> <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/binary/modules.html#custom-section" id="ref-for-custom-section">custom section</a> <var>customSection</var> of <var>bytes</var>, interpreted according to the <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/binary/modules.html#binary-module" id="ref-for-binary-module">module grammar</a>,</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑧">For each</a> <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/binary/modules.html#custom-section" id="ref-for-custom-section">custom section</a> <var>customSection</var> of <var>bytes</var>, interpreted according to the <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/binary/modules.html#binary-module" id="ref-for-binary-module">module grammar</a>,</p>
       <ol>
        <li data-md>
         <p>Let <var>name</var> be the <code>name</code> of <var>customSection</var>, <a data-link-type="dfn" href="https://encoding.spec.whatwg.org/#utf-8-decode-without-bom-or-fail" id="ref-for-utf-8-decode-without-bom-or-fail">decoded as UTF-8</a>.</p>
@@ -2639,7 +2643,7 @@ This slot holds a <a data-link-type="dfn" href="https://webassembly.github.io/sp
      <li data-md>
       <p>Let <var>i</var> be 0.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑧">For each</a> <var>t</var> of <var>parameters</var>,</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑨">For each</a> <var>t</var> of <var>parameters</var>,</p>
       <ol>
        <li data-md>
         <p>If <var>argValues</var>’s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size①">size</a> > <var>i</var>, let <var>arg</var> be <var>argValues</var>[<var>i</var>].</p>
@@ -2692,7 +2696,7 @@ This slot holds a <a data-link-type="dfn" href="https://webassembly.github.io/sp
        <li data-md>
         <p>Let <var>values</var> be « ».</p>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑨">For each</a> <var>r</var> of <var>ret</var>,</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⓪">For each</a> <var>r</var> of <var>ret</var>,</p>
         <ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append⑨">Append</a> <a data-link-type="dfn" href="#tojsvalue" id="ref-for-tojsvalue③">ToJSValue</a>(<var>r</var>) to <var>values</var>.</p>
@@ -2717,7 +2721,7 @@ This slot holds a <a data-link-type="dfn" href="https://webassembly.github.io/sp
      <li data-md>
       <p>Let <var>jsArguments</var> be « ».</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⓪">For each</a> <var>arg</var> of <var>arguments</var>,</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①①">For each</a> <var>arg</var> of <var>arguments</var>,</p>
       <ol>
        <li data-md>
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①⓪">Append</a> <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#sec-returnifabrupt-shorthands" id="ref-for-sec-returnifabrupt-shorthands②④">!</a> <a data-link-type="dfn" href="#tojsvalue" id="ref-for-tojsvalue④">ToJSValue</a>(<var>arg</var>) to <var>jsArguments</var>.</p>
@@ -3166,7 +3170,7 @@ To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="create-a-tag-o
      <li data-md>
       <p>Let <var>wasmParameters</var> be «».</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①①">For each</a> <var>type</var> of <var>parameters</var>,</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①②">For each</a> <var>type</var> of <var>parameters</var>,</p>
       <ol>
        <li data-md>
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①②">Append</a> <a data-link-type="dfn" href="#tovaluetype" id="ref-for-tovaluetype②">ToValueType</a>(<var>type</var>) to <var>wasmParameters</var>.</p>
@@ -3434,7 +3438,7 @@ constructor steps are:</p>
      <li data-md>
       <p>Let <var>wasmPayload</var> be « ».</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①②">For each</a> <var>value</var> and <var>resultType</var> of <var>payload</var> and <var>types</var>, paired linearly,</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①③">For each</a> <var>value</var> and <var>resultType</var> of <var>payload</var> and <var>types</var>, paired linearly,</p>
       <ol>
        <li data-md>
         <p>If <var>resultType</var> <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/valid/matching.html#match-valtype" id="ref-for-match-valtype⑥">matches</a> <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/syntax/types.html#vector-types" id="ref-for-vector-types⑧">v128</a> or <a data-link-type="dfn" href="https://webassembly.github.io/spec/core/syntax/types.html#syntax-reftype" id="ref-for-syntax-reftype①⑥">exnref</a>,</p>
@@ -3544,7 +3548,7 @@ When the <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-names
      <li data-md>
       <p>Let <var>namespaceObject</var> be the <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-namespace-object" id="ref-for-dfn-namespace-object①">namespace object</a>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①③">For each</a> <var>error</var> of « "CompileError", "LinkError", "RuntimeError" »,</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①④">For each</a> <var>error</var> of « "CompileError", "LinkError", "RuntimeError" »,</p>
       <ol>
        <li data-md>
         <p>Let <var>constructor</var> be a new object, implementing the <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#sec-nativeerror-object-structure" id="ref-for-sec-nativeerror-object-structure">NativeError Object Structure</a>, with <var>NativeError</var> set to <var>error</var>.</p>
@@ -3576,7 +3580,7 @@ They expose the same interface as native JavaScript errors like <code class="idl
      <li data-md>
       <p>Let <var>importName</var> be <var>import</var>[1].</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①④">For each</a> <var>builtinSetName</var> of <var>builtinSetNames</var>,</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑤">For each</a> <var>builtinSetName</var> of <var>builtinSetNames</var>,</p>
       <ol>
        <li data-md>
         <p>If <var>builtinSetName</var> does not refer to a builtin set, then <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue" id="ref-for-iteration-continue④">continue</a>.</p>
@@ -3588,7 +3592,7 @@ They expose the same interface as native JavaScript errors like <code class="idl
          <li data-md>
           <p>Let <var>builtins</var> be the result of <a data-link-type="dfn" href="#get-the-builtins-for-a-builtin-set" id="ref-for-get-the-builtins-for-a-builtin-set">get the builtins for a builtin set</a> <var>builtinSetName</var>.</p>
          <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑤">For each</a> <var>builtin</var> of <var>builtins</var>,</p>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑥">For each</a> <var>builtin</var> of <var>builtins</var>,</p>
           <ol>
            <li data-md>
             <p>Let <var>builtinName</var> be <var>builtin</var>[0].</p>
@@ -3631,7 +3635,7 @@ They expose the same interface as native JavaScript errors like <code class="idl
      <li data-md>
       <p>Let <var>exportsObject</var> be <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#sec-returnifabrupt-shorthands" id="ref-for-sec-returnifabrupt-shorthands④①">!</a> <a data-link-type="abstract-op" href="https://tc39.es/ecma262/multipage/ordinary-and-exotic-objects-behaviours.html#sec-ordinaryobjectcreate" id="ref-for-sec-ordinaryobjectcreate②">OrdinaryObjectCreate</a>(null).</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑥">For each</a> (<var>name</var>, <var>funcType</var>, <var>steps</var>) of <var>builtins</var>,</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate①⑦">For each</a> (<var>name</var>, <var>funcType</var>, <var>steps</var>) of <var>builtins</var>,</p>
       <ol>
        <li data-md>
         <p>Let <var>funcaddr</var> be the result fo <a data-link-type="dfn" href="#create-a-builtin-function" id="ref-for-create-a-builtin-function">create a builtin function</a> with <var>funcType</var> and <var>steps</var>.</p>
@@ -5391,7 +5395,7 @@ let dfnPanelData = {
 "exported-function-cache": {"dfnID":"exported-function-cache","dfnText":"Exported Function cache","external":false,"refSections":[{"refs":[{"id":"ref-for-exported-function-cache"}],"title":"5.6. Exported Functions"}],"url":"#exported-function-cache"},
 "exported-gc-object": {"dfnID":"exported-gc-object","dfnText":"Exported GC Object","external":false,"refSections":[{"refs":[{"id":"ref-for-exported-gc-object"}],"title":"4.2. WebAssembly JS Object Caches"},{"refs":[{"id":"ref-for-exported-gc-object\u2460"}],"title":"5.6. Exported Functions"},{"refs":[{"id":"ref-for-exported-gc-object\u2461"},{"id":"ref-for-exported-gc-object\u2462"},{"id":"ref-for-exported-gc-object\u2463"},{"id":"ref-for-exported-gc-object\u2464"}],"title":"5.8. Garbage Collected Objects"}],"url":"#exported-gc-object"},
 "exported-gc-object-cache": {"dfnID":"exported-gc-object-cache","dfnText":"Exported GC Object cache","external":false,"refSections":[{"refs":[{"id":"ref-for-exported-gc-object-cache"}],"title":"5.8. Garbage Collected Objects"}],"url":"#exported-gc-object-cache"},
-"f02cd417": {"dfnID":"f02cd417","dfnText":"iterate (for list)","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"},{"id":"ref-for-list-iterate\u2460"},{"id":"ref-for-list-iterate\u2461"},{"id":"ref-for-list-iterate\u2462"},{"id":"ref-for-list-iterate\u2463"}],"title":"5. The WebAssembly Namespace"},{"refs":[{"id":"ref-for-list-iterate\u2464"},{"id":"ref-for-list-iterate\u2465"},{"id":"ref-for-list-iterate\u2466"}],"title":"5.1. Modules"},{"refs":[{"id":"ref-for-list-iterate\u2467"},{"id":"ref-for-list-iterate\u2468"},{"id":"ref-for-list-iterate\u2460\u24ea"}],"title":"5.6. Exported Functions"},{"refs":[{"id":"ref-for-list-iterate\u2460\u2460"}],"title":"5.7.1. Tag types"},{"refs":[{"id":"ref-for-list-iterate\u2460\u2461"}],"title":"5.9. Exceptions"},{"refs":[{"id":"ref-for-list-iterate\u2460\u2462"}],"title":"5.10. Error Objects"},{"refs":[{"id":"ref-for-list-iterate\u2460\u2463"},{"id":"ref-for-list-iterate\u2460\u2464"},{"id":"ref-for-list-iterate\u2460\u2465"}],"title":"6. Builtins"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
+"f02cd417": {"dfnID":"f02cd417","dfnText":"iterate (for list)","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"},{"id":"ref-for-list-iterate\u2460"},{"id":"ref-for-list-iterate\u2461"},{"id":"ref-for-list-iterate\u2462"},{"id":"ref-for-list-iterate\u2463"},{"id":"ref-for-list-iterate\u2464"}],"title":"5. The WebAssembly Namespace"},{"refs":[{"id":"ref-for-list-iterate\u2465"},{"id":"ref-for-list-iterate\u2466"},{"id":"ref-for-list-iterate\u2467"}],"title":"5.1. Modules"},{"refs":[{"id":"ref-for-list-iterate\u2468"},{"id":"ref-for-list-iterate\u2460\u24ea"},{"id":"ref-for-list-iterate\u2460\u2460"}],"title":"5.6. Exported Functions"},{"refs":[{"id":"ref-for-list-iterate\u2460\u2461"}],"title":"5.7.1. Tag types"},{"refs":[{"id":"ref-for-list-iterate\u2460\u2462"}],"title":"5.9. Exceptions"},{"refs":[{"id":"ref-for-list-iterate\u2460\u2463"}],"title":"5.10. Error Objects"},{"refs":[{"id":"ref-for-list-iterate\u2460\u2464"},{"id":"ref-for-list-iterate\u2460\u2465"},{"id":"ref-for-list-iterate\u2460\u2466"}],"title":"6. Builtins"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
 "f0590fd3": {"dfnID":"f0590fd3","dfnText":"String.fromCharCode","external":true,"refSections":[{"refs":[{"id":"ref-for-sec-string.fromcharcode"}],"title":"6.1.1. Abstract operations"}],"url":"https://tc39.github.io/ecma262/#sec-string.fromcharcode"},
 "f06ddd8a": {"dfnID":"f06ddd8a","dfnText":"memaddrs","external":true,"refSections":[{"refs":[{"id":"ref-for-syntax-moduleinst"},{"id":"ref-for-syntax-moduleinst\u2460"}],"title":"5.3. Memories"}],"url":"https://webassembly.github.io/spec/core/exec/runtime.html#syntax-moduleinst"},
 "f0c8810c": {"dfnID":"f0c8810c","dfnText":"import","external":true,"refSections":[{"refs":[{"id":"ref-for-syntax-import"}],"title":"9. Security and Privacy Considerations"}],"url":"https://webassembly.github.io/spec/core/syntax/modules.html#syntax-import"},

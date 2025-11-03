@@ -225,29 +225,40 @@ If it does, the post conditions are guaranteed by the semantics.</p>
 <p>The store may be modified even in case of an error.</p>
 </div>
 </section>
-<section id="mathrm-module-imports-xref-syntax-modules-syntax-module-mathit-module-xref-syntax-values-syntax-name-mathit-name-xref-syntax-values-syntax-name-mathit-name-xref-syntax-types-syntax-externtype-mathit-externtype-ast">
-<span id="embed-module-imports"></span><span id="index-7"></span><h3><span class="math notranslate nohighlight">\(\mathrm{module\_imports}(\href{../syntax/modules.html#syntax-module}{\mathit{module}}) : (\href{../syntax/values.html#syntax-name}{\mathit{name}}, \href{../syntax/values.html#syntax-name}{\mathit{name}}, \href{../syntax/types.html#syntax-externtype}{\mathit{externtype}})^\ast\)</span><a class="headerlink" href="#mathrm-module-imports-xref-syntax-modules-syntax-module-mathit-module-xref-syntax-values-syntax-name-mathit-name-xref-syntax-values-syntax-name-mathit-name-xref-syntax-types-syntax-externtype-mathit-externtype-ast" title="Link to this heading">¶</a></h3>
+<section id="mathrm-module-imports-xref-syntax-modules-syntax-module-mathit-module-xref-syntax-values-syntax-name-mathit-name-xref-syntax-values-syntax-name-mathit-name-xref-syntax-types-syntax-externtype-mathit-externtype-ast-ast">
+<span id="embed-module-imports"></span><span id="index-7"></span><h3><span class="math notranslate nohighlight">\(\mathrm{module\_imports}(\href{../syntax/modules.html#syntax-module}{\mathit{module}}) : (\href{../syntax/values.html#syntax-name}{\mathit{name}}, (\href{../syntax/values.html#syntax-name}{\mathit{name}}, \href{../syntax/types.html#syntax-externtype}{\mathit{externtype}})^\ast)^\ast\)</span><a class="headerlink" href="#mathrm-module-imports-xref-syntax-modules-syntax-module-mathit-module-xref-syntax-values-syntax-name-mathit-name-xref-syntax-values-syntax-name-mathit-name-xref-syntax-types-syntax-externtype-mathit-externtype-ast-ast" title="Link to this heading">¶</a></h3>
 <ol class="arabic simple">
 <li><p>Pre-condition: <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-module}{\mathit{module}}\)</span> is <a class="reference internal" href="../valid/modules.html#valid-module"><span class="std std-ref">valid</span></a> with the external import types <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}^\ast\)</span> and external export types <span class="math notranslate nohighlight">\({\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}'}^\ast\)</span>.</p></li>
-<li><p>Let <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-import}{\mathit{import}}^\ast\)</span> be the <a class="reference internal" href="../syntax/modules.html#syntax-import"><span class="std std-ref">imports</span></a> of <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-module}{\mathit{module}}\)</span>.</p></li>
-<li><p>Assert: the length of <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-import}{\mathit{import}}^\ast\)</span> equals the length of <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}^\ast\)</span>.</p></li>
-<li><p>For each <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-import}{\mathit{import}}_i\)</span> in <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-import}{\mathit{import}}^\ast\)</span> and corresponding <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}_i\)</span> in <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}^\ast\)</span>, do:</p></li>
+<li><p>Let <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-importmod}{\mathit{importmod}}^\ast\)</span> be the <a class="reference internal" href="../syntax/modules.html#syntax-importmod"><span class="std std-ref">import modules</span></a> of <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-module}{\mathit{module}}\)</span>.</p></li>
+<li><p>Assert: the sum of the lengths of the items of <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-importmod}{\mathit{importmod}}^\ast\)</span> equals the length of <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}^\ast\)</span>.</p></li>
+<li><p>Let <span class="math notranslate nohighlight">\(n = 0\)</span>.</p></li>
+<li><p>For each <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-importmod}{\mathit{importmod}}_i\)</span> in <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-importmod}{\mathit{importmod}}^\ast\)</span>:</p></li>
 </ol>
 <blockquote>
 <div><ol class="loweralpha simple">
-<li><p>Let <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-import}{\mathsf{import}}~\mathit{nm}_{i1}~\mathit{nm}_{i2}~\mathit{xt}_i\)</span> be the deconstruction of <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-import}{\mathit{import}}_i\)</span>.</p></li>
-<li><p>Let <span class="math notranslate nohighlight">\(\mathit{result}_i\)</span> be the triple <span class="math notranslate nohighlight">\((\mathit{nm}_{i1}, \mathit{nm}_{i2}, \href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}_i)\)</span>.</p></li>
+<li><p>Let <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-importmod}{\mathsf{importmod}}~\mathit{nm}_1~\mathit{imports}\)</span> be the deconstruction of <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-importmod}{\mathit{importmod}}_i\)</span>.</p></li>
+<li><p>For each <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-import}{\mathit{import}}_j\)</span> in <span class="math notranslate nohighlight">\(\mathit{imports}\)</span> and corresponding <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}_n\)</span> in <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}^\ast\)</span>, do:</p></li>
+</ol>
+<blockquote>
+<div><ol class="lowerroman simple">
+<li><p>Let <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-import}{\mathsf{import}}~\mathit{nm}_2~\mathit{xt}_j\)</span> be the deconstruction of <span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-import}{\mathit{import}}_j\)</span>.</p></li>
+<li><p>Let <span class="math notranslate nohighlight">\(\mathit{resultimport}_n\)</span> be the pair <span class="math notranslate nohighlight">\((\mathit{nm}_2, \href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}_n)\)</span>.</p></li>
+<li><p>Increment <span class="math notranslate nohighlight">\(n\)</span>.</p></li>
 </ol>
 </div></blockquote>
-<ol class="arabic simple" start="5">
+<ol class="loweralpha simple" start="3">
+<li><p>Let <span class="math notranslate nohighlight">\(\mathit{result}_i\)</span> be the pair <span class="math notranslate nohighlight">\((\mathit{nm}_1, \mathit{resultimports})\)</span>, where <span class="math notranslate nohighlight">\(\mathit{resultimports}\)</span> is the concatenation of all <span class="math notranslate nohighlight">\(\mathit{resultimport}_i\)</span>, in index order.</p></li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple" start="6">
 <li><p>Return the concatenation of all <span class="math notranslate nohighlight">\(\mathit{result}_i\)</span>, in index order.</p></li>
 <li><p>Post-condition: each <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}_i\)</span> is <a class="reference internal" href="../valid/types.html#valid-externtype"><span class="std std-ref">valid</span></a> under the empty <a class="reference internal" href="../valid/conventions.html#context"><span class="std std-ref">context</span></a>.</p></li>
 </ol>
 <div class="math notranslate nohighlight">
 \[\begin{split}~ \\
 \begin{array}{lclll}
-\mathrm{module\_imports}(m) &amp;=&amp; (\mathit{nm}_1, \mathit{nm}_2, \href{../syntax/types.html#syntax-externtype}{\mathit{externtype}})^\ast \\
-  &amp;&amp; \qquad (\mathrel{\mbox{if}} (\href{../syntax/modules.html#syntax-import}{\mathsf{import}}~\mathit{nm}_1~\mathit{nm}_2~\mathit{xt}^\ast)^\ast \in m \wedge {} \href{../valid/modules.html#valid-module}{\vdash} m : \href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}^\ast \rightarrow {\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}'}^\ast) \\
+\mathrm{module\_imports}(m) &amp;=&amp; (\mathit{nm}_1, (\mathit{nm}_2, \href{../syntax/types.html#syntax-externtype}{\mathit{externtype}})^\ast)^\ast \\
+  &amp;&amp; \qquad (\mathrel{\mbox{if}} (\href{../syntax/modules.html#syntax-importmod}{\mathsf{importmod}}~\mathit{nm}_1~(\href{../syntax/modules.html#syntax-import}{\mathsf{import}}~\mathit{nm}_2~\mathit{xt})^\ast)^\ast \in m \wedge {} \href{../valid/modules.html#valid-module}{\vdash} m : \href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}^\ast \rightarrow {\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}'}^\ast) \\
 \end{array}\end{split}\]</div>
 </section>
 <section id="mathrm-module-exports-xref-syntax-modules-syntax-module-mathit-module-xref-syntax-values-syntax-name-mathit-name-xref-syntax-types-syntax-externtype-mathit-externtype-ast">
