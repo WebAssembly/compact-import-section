@@ -887,6 +887,7 @@
 .. |Bglobal| mathdef:: \xref{binary/modules}{binary-global}{\B{global}}
 .. |Btag| mathdef:: \xref{binary/modules}{binary-tag}{\B{tag}}
 .. |Bimport| mathdef:: \xref{binary/modules}{binary-import}{\B{import}}
+.. |Bimports| mathdef:: \xref{binary/modules}{binary-imports}{\B{imports}}
 .. |Bexport| mathdef:: \xref{binary/modules}{binary-export}{\B{export}}
 .. |Belem| mathdef:: \xref{binary/modules}{binary-elem}{\B{elem}}
 .. |Belemkind| mathdef:: \xref{binary/modules}{binary-elemkind}{\B{elemkind}}

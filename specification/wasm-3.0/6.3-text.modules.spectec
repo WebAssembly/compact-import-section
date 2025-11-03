@@ -130,33 +130,36 @@ grammar Tstart_(I) : (start, idctxt) =
 
 ;; Imports
 
-grammar Timport_(I)/plain : (import, idctxt) =
-  | "(" "import" nm_1:Tname nm_2:Tname (xt,I'):Texterntype_(I) ")" => (IMPORT nm_1 nm_2 xt, I')
+grammar Timport_(I)/plain : (name, externtype, idctxt) =
+  | "(" "item" nm_2:Tname (xt,I'):Texterntype_(I) ")" => (nm_2, xt, I')
+
+grammar Timports_(I)/plain : (import*, idctxt) =
+  | "(" "import" nm_1:Tname (nm_2,xt,I')*:Timport_(I)* ")" => ($concat_(import, IMPORT nm_1 nm_2 xt), I')
   | ...
 
-grammar Timport_(I)/abbrev-tag : (import, idctxt) = ...
+grammar Timports_(I)/abbrev-tag : (import*, idctxt) = ...
   | "(" "tag" Tid? "(" "import" Tname^2 ")" Ttagtype_(I) ")" ==
-    "(" "import" Tname^2 "(" "tag" Tid? Ttagtype_(I) ")" ")"
+    "(" "import" Tname "(" "item" Tname "(" "tag" Tid? Ttagtype_(I) ")" ")" ")"
   | ...
 
-grammar Timport_(I)/abbrev-global : (import, idctxt) = ...
+grammar Timports_(I)/abbrev-global : (import*, idctxt) = ...
   | "(" "global" Tid? "(" "import" Tname^2 ")" Tglobaltype_(I) ")" ==
-    "(" "import" Tname^2 "(" "global" Tid? Tglobaltype_(I) ")" ")"
+    "(" "import" Tname "(" "item" Tname "(" "global" Tid? Tglobaltype_(I) ")" ")" ")"
   | ...
 
-grammar Timport_(I)/abbrev-mem : (import, idctxt) = ...
+grammar Timports_(I)/abbrev-mem : (import*, idctxt) = ...
   | "(" "memory" Tid? "(" "import" Tname^2 ")" Tmemtype_(I) ")" ==
-    "(" "import" Tname^2 "(" "memory" Tid? Tmemtype_(I) ")" ")"
+    "(" "import" Tname "(" "item" Tname "(" "memory" Tid? Tmemtype_(I) ")" ")" ")"
   | ...
 
-grammar Timport_(I)/abbrev-table : (import, idctxt) = ...
+grammar Timports_(I)/abbrev-table : (import*, idctxt) = ...
   | "(" "table" Tid? "(" "import" Tname^2 ")" Ttabletype_(I) ")" ==
-    "(" "import" Tname^2 "(" "table" Tid? Ttabletype_(I) ")" ")"
+    "(" "import" Tname "(" "item" Tname "(" "table" Tid? Ttabletype_(I) ")" ")" ")"
   | ...
 
-grammar Timport_(I)/abbrev-func : (import, idctxt) = ...
+grammar Timports_(I)/abbrev-func : (import*, idctxt) = ...
   | "(" "func" Tid? "(" "import" Tname^2 ")" Ttypeuse_(I) ")" ==
-    "(" "import" Tname^2 "(" "func" Tid? Ttypeuse_(I) ")" ")"
+    "(" "import" Tname "(" "item" Tname "(" "func" Tid? Ttypeuse_(I) ")" ")" ")"
 
 
 ;; Exports
@@ -253,7 +256,7 @@ grammar Telemtable_(I)/abbrev : () hint(show Ttable_(%)) =
 ;; Modules
 
 syntax decl hint(name "declaration") =
-  type | import | tag | global | mem | table | func | data | elem | start | export
+  type | import* | tag | global | mem | table | func | data | elem | start | export
 
 def $typesd(decl*) : type*      hint(show $types(%))   hint(macro "typesd")
 def $importsd(decl*) : import*  hint(show $imports(%)) hint(macro "importsd")
@@ -320,7 +323,7 @@ def $ordered(decl_1* import decl_2*) =
 
 
 grammar Tdecl_(I) : (decl, idctxt) =
-  | Ttype_(I) | Timport_(I) | Ttag_(I) | Tglobal_(I) | Tmem_(I) | Ttable_(I)
+  | Ttype_(I) | Timports_(I) | Ttag_(I) | Tglobal_(I) | Tmem_(I) | Ttable_(I)
   | Tfunc_(I) | Tdata_(I) | Telem_(I) | Tstart_(I) | Texport_(I)
 
 

@@ -139,6 +139,7 @@ $${grammar: {Btypesec Btype}}
    pair: binary format; import
    pair: section; import
 .. _binary-import:
+.. _binary-imports:
 .. _binary-importdesc:
 .. _binary-importsec:
 
@@ -148,7 +149,10 @@ Import Section
 The *import section* has the id 2.
 It decodes into the list of :ref:`imports <syntax-import>` of a :ref:`module <syntax-module>`.
 
-$${grammar: {Bimportsec Bimport}}
+$${grammar: {Bimportsec Bimports Bimport}}
+
+.. note::
+   The encoding of :ref:`imports <binary-imports>` beginning with ${:0x01 0xFF} allows multiple imports to be expressed without repeating the module name. ${:0x01 0xFF} decodes as an invalid :ref:`name <binary-name>` for compatibility with older implementations.
 
 
 .. index:: ! function section, function, type index, function type
