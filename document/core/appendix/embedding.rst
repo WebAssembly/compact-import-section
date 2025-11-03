@@ -188,30 +188,40 @@ Modules
 .. index:: import
 .. _embed-module-imports:
 
-:math:`\F{module\_imports}(\module) : (\name, \name, \externtype)^\ast`
-.......................................................................
+:math:`\F{module\_imports}(\module) : (\name, (\name, \externtype)^\ast)^\ast`
+..............................................................................
 
 1. Pre-condition: :math:`\module` is :ref:`valid <valid-module>` with the external import types :math:`\externtype^\ast` and external export types :math:`{\externtype'}^\ast`.
 
-2. Let :math:`\import^\ast` be the :ref:`imports <syntax-import>` of :math:`\module`.
+2. Let :math:`\importmod^\ast` be the :ref:`import modules <syntax-importmod>` of :math:`\module`.
 
-3. Assert: the length of :math:`\import^\ast` equals the length of :math:`\externtype^\ast`.
+3. Assert: the sum of the lengths of the items of :math:`\importmod^\ast` equals the length of :math:`\externtype^\ast`.
 
-4. For each :math:`\import_i` in :math:`\import^\ast` and corresponding :math:`\externtype_i` in :math:`\externtype^\ast`, do:
+4. Let :math:`n = 0`.
 
-  a. Let :math:`\IMPORT~\X{nm}_{i1}~\X{nm}_{i2}~\X{xt}_i` be the deconstruction of :math:`\import_i`.
+5. For each :math:`\importmod_i` in :math:`\importmod^\ast`:
 
-  b. Let :math:`\X{result}_i` be the triple :math:`(\X{nm}_{i1}, \X{nm}_{i2}, \externtype_i)`.
+  a. Let :math:`\IMPORTMOD~\X{nm}_1~\X{imports}` be the deconstruction of :math:`\importmod_i`.
 
-5. Return the concatenation of all :math:`\X{result}_i`, in index order.
+  b. For each :math:`\import_j` in :math:`\X{imports}` and corresponding :math:`\externtype_n` in :math:`\externtype^\ast`, do:
 
-6. Post-condition: each :math:`\externtype_i` is :ref:`valid <valid-externtype>` under the empty :ref:`context <context>`.
+    i. Let :math:`\IMPORT~\X{nm}_2~\X{xt}_j` be the deconstruction of :math:`\import_j`.
+
+    ii. Let :math:`\X{resultimport}_n` be the pair :math:`(\X{nm}_2, \externtype_n)`.
+
+    iii. Increment :math:`n`.
+
+  c. Let :math:`\X{result}_i` be the pair :math:`(\X{nm}_1, \X{resultimports})`, where :math:`\X{resultimports}` is the concatenation of all :math:`\X{resultimport}_i`, in index order.
+
+6. Return the concatenation of all :math:`\X{result}_i`, in index order.
+
+7. Post-condition: each :math:`\externtype_i` is :ref:`valid <valid-externtype>` under the empty :ref:`context <context>`.
 
 .. math::
    ~ \\
    \begin{array}{lclll}
-   \F{module\_imports}(m) &=& (\X{nm}_1, \X{nm}_2, \externtype)^\ast \\
-     && \qquad (\iff (\IMPORT~\X{nm}_1~\X{nm}_2~\X{xt}^\ast)^\ast \in m \wedge {} \vdashmodule m : \externtype^\ast \rightarrow {\externtype'}^\ast) \\
+   \F{module\_imports}(m) &=& (\X{nm}_1, (\X{nm}_2, \externtype)^\ast)^\ast \\
+     && \qquad (\iff (\IMPORTMOD~\X{nm}_1~(\IMPORT~\X{nm}_2~\X{xt})^\ast)^\ast \in m \wedge {} \vdashmodule m : \externtype^\ast \rightarrow {\externtype'}^\ast) \\
    \end{array}
 
 

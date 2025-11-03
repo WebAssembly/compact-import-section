@@ -498,55 +498,56 @@ To <dfn>instantiate imported strings</dfn> with module |module| and |importedStr
         1. Let |exportsObject| be the result of [=instantiate imported strings=] with |module| and |importedStringModule|
         1. [=map/set|Set=] |builtinOrStringImports|[|importedStringModule|] to |exportsObject|
     1. Let |imports| be « ».
-    1. [=list/iterate|For each=] (|moduleName|, |componentName|, |externtype|) of [=module_imports=](|module|),
+    1. [=list/iterate|For each=] (|moduleName|, |moduleImports|) of [=module_imports=](|module|),
         1. If |builtinOrStringImports| [=map/exist|contains=] |moduleName|,
             1. Let |o| be |builtinOrStringImports|[|moduleName|].
-            1. If |o| [=is not an Object=] or if |o| [=map/exist|does not contain=] |componentName|,
+            1. If |o| [=is not an Object=] or if |o| [=map/exist|does not contain=] |itemName|,
                 1. Set |o| to [=?=] [$Get$](|importObject|, |moduleName|).
         1. Else,
             1. Let |o| be [=?=] [$Get$](|importObject|, |moduleName|).
-        1. If |o| [=is not an Object=], throw a {{TypeError}} exception.
-        1. Let |v| be [=?=] [$Get$](|o|, |componentName|).
-        1. If |externtype| is of the form [=external-type/func=] |functype|,
-            1. If [$IsCallable$](|v|) is false, throw a {{LinkError}} exception.
-            1. If |v| has a \[[FunctionAddress]] internal slot, and therefore is an [=Exported Function=],
-                1. Let |funcaddr| be the value of |v|'s \[[FunctionAddress]] internal slot.
-            1. Otherwise,
-                1. [=Create a host function=] from |v| and |functype|, and let |funcaddr| be the result.
-                1. Let |index| be the number of external functions in |imports|. This value |index| is known as the <dfn>index of the host function</dfn> |funcaddr|.
-            1. Let |externfunc| be the [=external value=] [=external value|func=] |funcaddr|.
-            1. [=list/Append=] |externfunc| to |imports|.
-        1. If |externtype| is of the form [=external-type/global=] <var ignore>mut</var> |valtype|,
-            1. If |v| [=implements=] {{Global}},
-                1. Let |globaladdr| be |v|.\[[Global]].
-            1. Otherwise,
-                1. If |valtype| is [=i64=] and |v| [=is not a BigInt=],
-                    1. Throw a {{LinkError}} exception.
-                1. If |valtype| is one of [=i32=], [=f32=] or [=f64=] and |v| [=is not a Number=],
-                    1. Throw a {{LinkError}} exception.
-                1. If |valtype| is [=v128=],
-                    1. Throw a {{LinkError}} exception.
-                1. Let |value| be [=ToWebAssemblyValue=](|v|, |valtype|). If this operation throws a {{TypeError}}, catch it, and throw a {{LinkError}} exception.
-                1. Let |store| be the [=surrounding agent=]'s [=associated store=].
-                1. Let (|store|, |globaladdr|) be [=global_alloc=](|store|, [=const=] |valtype|, |value|).
-                1. Set the [=surrounding agent=]'s [=associated store=] to |store|.
-            1. Let |externglobal| be [=external value|global=] |globaladdr|.
-            1. [=list/Append=] |externglobal| to |imports|.
-        1. If |externtype| is of the form [=external-type/mem=] <var ignore>memtype</var>,
-            1. If |v| does not [=implement=] {{Memory}}, throw a {{LinkError}} exception.
-            1. Let |externmem| be the [=external value=] [=external value|mem=] |v|.\[[Memory]].
-            1. [=list/Append=] |externmem| to |imports|.
-        1. If |externtype| is of the form [=external-type/table=] <var ignore>tabletype</var>,
-            1. If |v| does not [=implement=] {{Table}}, throw a {{LinkError}} exception.
-            1. Let |tableaddr| be |v|.\[[Table]].
-            1. Let |externtable| be the [=external value=] [=external value|table=] |tableaddr|.
-            1. [=list/Append=] |externtable| to |imports|.
-        1. If |externtype| is of the form [=external-type/tag=] |attribute| <var ignore>functype</var>,
-            1. Assert: |attribute| is [=tagtype/attribute/exception=].
-            1. If |v| does not [=implement=] {{Tag}}, throw a {{LinkError}} exception.
-            1. Let |tagaddr| be |v|.\[[Address]].
-            1. Let |externtag| be the [=external value=] [=external value/tag=] |tagaddr|.
-            1. [=list/Append=] |externtag| to |imports|.
+        1. [=list/iterate|For each=] (|itemName|, |externtype|) of |moduleImports|,
+            1. If |o| [=is not an Object=], throw a {{TypeError}} exception.
+            1. Let |v| be [=?=] [$Get$](|o|, |itemName|).
+            1. If |externtype| is of the form [=external-type/func=] |functype|,
+                1. If [$IsCallable$](|v|) is false, throw a {{LinkError}} exception.
+                1. If |v| has a \[[FunctionAddress]] internal slot, and therefore is an [=Exported Function=],
+                    1. Let |funcaddr| be the value of |v|'s \[[FunctionAddress]] internal slot.
+                1. Otherwise,
+                    1. [=Create a host function=] from |v| and |functype|, and let |funcaddr| be the result.
+                    1. Let |index| be the number of external functions in |imports|. This value |index| is known as the <dfn>index of the host function</dfn> |funcaddr|.
+                1. Let |externfunc| be the [=external value=] [=external value|func=] |funcaddr|.
+                1. [=list/Append=] |externfunc| to |imports|.
+            1. If |externtype| is of the form [=external-type/global=] <var ignore>mut</var> |valtype|,
+                1. If |v| [=implements=] {{Global}},
+                    1. Let |globaladdr| be |v|.\[[Global]].
+                1. Otherwise,
+                    1. If |valtype| is [=i64=] and |v| [=is not a BigInt=],
+                        1. Throw a {{LinkError}} exception.
+                    1. If |valtype| is one of [=i32=], [=f32=] or [=f64=] and |v| [=is not a Number=],
+                        1. Throw a {{LinkError}} exception.
+                    1. If |valtype| is [=v128=],
+                        1. Throw a {{LinkError}} exception.
+                    1. Let |value| be [=ToWebAssemblyValue=](|v|, |valtype|). If this operation throws a {{TypeError}}, catch it, and throw a {{LinkError}} exception.
+                    1. Let |store| be the [=surrounding agent=]'s [=associated store=].
+                    1. Let (|store|, |globaladdr|) be [=global_alloc=](|store|, [=const=] |valtype|, |value|).
+                    1. Set the [=surrounding agent=]'s [=associated store=] to |store|.
+                1. Let |externglobal| be [=external value|global=] |globaladdr|.
+                1. [=list/Append=] |externglobal| to |imports|.
+            1. If |externtype| is of the form [=external-type/mem=] <var ignore>memtype</var>,
+                1. If |v| does not [=implement=] {{Memory}}, throw a {{LinkError}} exception.
+                1. Let |externmem| be the [=external value=] [=external value|mem=] |v|.\[[Memory]].
+                1. [=list/Append=] |externmem| to |imports|.
+            1. If |externtype| is of the form [=external-type/table=] <var ignore>tabletype</var>,
+                1. If |v| does not [=implement=] {{Table}}, throw a {{LinkError}} exception.
+                1. Let |tableaddr| be |v|.\[[Table]].
+                1. Let |externtable| be the [=external value=] [=external value|table=] |tableaddr|.
+                1. [=list/Append=] |externtable| to |imports|.
+            1. If |externtype| is of the form [=external-type/tag=] |attribute| <var ignore>functype</var>,
+                1. Assert: |attribute| is [=tagtype/attribute/exception=].
+                1. If |v| does not [=implement=] {{Tag}}, throw a {{LinkError}} exception.
+                1. Let |tagaddr| be |v|.\[[Address]].
+                1. Let |externtag| be the [=external value=] [=external value/tag=] |tagaddr|.
+                1. [=list/Append=] |externtag| to |imports|.
     1. Return |imports|.
 
 Note: This algorithm only verifies the right kind of JavaScript values are passed.
