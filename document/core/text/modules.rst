@@ -91,7 +91,7 @@ Abbreviations
 
 Tags can be defined as :ref:`imports <text-import>` or :ref:`exports <text-export>` inline:
 
-$${grammar: Timport_/abbrev-tag Texporttag_}
+$${grammar: Timportmod_/abbrev-tag Texporttag_}
 
 .. note::
    The latter abbreviation can be applied repeatedly, if "${grammar-case: Texporttagdots_(I)}" contains additional export clauses.
@@ -121,7 +121,7 @@ Abbreviations
 
 Globals can be defined as :ref:`imports <text-import>` or :ref:`exports <text-export>` inline:
 
-$${grammar: Timport_/abbrev-global Texportglobal_}
+$${grammar: Timportmod_/abbrev-global Texportglobal_}
 
 .. note::
    The latter abbreviation can be applied repeatedly, if "${grammar-case: Texportglobaldots_(I)}" contains additional export clauses.
@@ -159,7 +159,7 @@ $${grammar: Tdatamem_}
 
 Memories can be defined as :ref:`imports <text-import>` or :ref:`exports <text-export>` inline:
 
-$${grammar: Timport_/abbrev-mem Texportmem_}
+$${grammar: Timportmod_/abbrev-mem Texportmem_}
 
 .. note::
    The latter abbreviation can be applied repeatedly, if "${grammar-case: Texportmemdots_(I)}" contains additional export clauses.
@@ -202,7 +202,7 @@ $${grammar: Telemtable_}
 
 Tables can be defined as :ref:`imports <text-import>` or :ref:`exports <text-export>` inline:
 
-$${grammar: Timport_/abbrev-table Texporttable_}
+$${grammar: Timportmod_/abbrev-table Texporttable_}
 
 .. note::
    The latter abbreviation can be applied repeatedly, if "${grammar-case: Texporttabledots_(I)}" contains additional export clauses.
@@ -243,7 +243,7 @@ $${grammar: Tlocal_/abbrev}
 
 Functions can be defined as :ref:`imports <text-import>` or :ref:`exports <text-export>` inline:
 
-$${grammar: Timport_/abbrev-func Texportfunc_}
+$${grammar: Timportmod_/abbrev-func Texportfunc_}
 
 .. note::
    The latter abbreviation can be applied repeatedly, if "${grammar-case: Texportfuncdots_(I)}" contains additional export clauses.
@@ -343,6 +343,7 @@ $${grammar: Tstart_}
 
 .. index:: import, name, tag type, global type, memory type, table type, function type
    pair: text format; import
+.. _text-importmod:
 .. _text-import:
 
 Imports
@@ -350,13 +351,17 @@ Imports
 
 The :ref:`external type <syntax-externtype>` in imports can bind a symbolic tag, global, memory, or function :ref:`identifier <text-id>`.
 
-$${grammar: Timport_/plain}
+$${grammar: Timportmod_/plain Timport_/plain}
 
 
 Abbreviations
 .............
 
-As an abbreviation, imports may also be specified inline with
+As an abbreviation, an import module with a single import may omit the parentheses around the import:
+
+$${grammar: Timportmod_/abbrev-one}
+
+Imports may also be specified inline with
 :ref:`tag <text-tag>`,
 :ref:`global <text-global>`,
 :ref:`memory <text-mem>`,
@@ -428,7 +433,7 @@ in a sequence of declarations:
 
 $${definition: ordered}
 
-$${definition-ignore: typesd importsd tagsd globalsd memsd tablesd funcsd datasd elemsd startsd exportsd}
+$${definition-ignore: typesd importmodsd tagsd globalsd memsd tablesd funcsd datasd elemsd startsd exportsd}
 
 
 Abbreviations

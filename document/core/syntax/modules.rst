@@ -301,7 +301,7 @@ $${syntax: start}
    The module and its exports are not accessible externally before this initialization has completed.
 
 
-.. index:: ! import, name, function type, table type, memory type, global type, tag type, index, index space, type index, function index, table index, memory index, global index, tag index, function, table, memory, tag, global, instantiation
+.. index:: ! import module, import, name, function type, table type, memory type, global type, tag type, index, index space, type index, function index, table index, memory index, global index, tag index, function, table, memory, tag, global, instantiation
    pair: abstract syntax; import
    single: tag; import
    single: global; import
@@ -310,13 +310,14 @@ $${syntax: start}
    single: function; import
 .. _syntax-importdesc:
 .. _syntax-import:
+.. _syntax-importmod:
 
 Imports
 ~~~~~~~
 
-The ${:import} section of a module defines a set of *imports* that are required for :ref:`instantiation <exec-instantiation>`.
+The ${:import} section of a module defines a set of *import modules* that are required for :ref:`instantiation <exec-instantiation>`.
 
-$${syntax: import}
+$${syntax: importmod import}
 
 Each import is labeled by a two-level :ref:`name <syntax-name>` space, consisting of a *module name* and an *item name* for an entity within that module.
 Importable definitions are

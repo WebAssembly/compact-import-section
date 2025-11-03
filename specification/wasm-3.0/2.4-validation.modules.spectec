@@ -96,12 +96,17 @@ rule Start_ok:
 ;; Im/exports
 
 relation Import_ok: context |- import : externtype        hint(name "T-import")    hint(macro "%import")
+relation ImportMod_ok: context |- importmod : externtype* hint(name "T-importmod") hint(macro "%importmod")
 relation Export_ok: context |- export : name externtype   hint(name "T-export")    hint(macro "%export")
 relation Externidx_ok: context |- externidx : externtype  hint(name "T-externidx") hint(macro "%externidx")
 
 rule Import_ok:
-  C |- IMPORT name_1 name_2 xt : $clos_externtype(C, xt)
+  C |- IMPORT name xt : $clos_externtype(C, xt)
   -- Externtype_ok: C |- xt : OK
+
+rule ImportMod_ok:
+  C |- IMPORTMOD name import* : externtype*
+  -- (Import_ok: C |- import : externtype)*
 
 rule Export_ok:
   C |- EXPORT name externidx : name xt
@@ -141,9 +146,9 @@ def $funcidx_nonfuncs(nonfuncs) : funcidx*  hint(show $funcidx(%)) hint(macro "f
 def $funcidx_nonfuncs(global* mem* table* elem*) = $funcidx_module(MODULE eps eps eps global* mem* table* eps eps elem* eps eps)
 
 rule Module_ok:
-  |- MODULE type* import* tag* global* mem* table* func* data* elem* start? export* : $clos_moduletype(C, xt_I* -> xt_E*)
+  |- MODULE type* importmod* tag* global* mem* table* func* data* elem* start? export* : $clos_moduletype(C, xt_I* -> xt_E*)
   -- Types_ok: {} |- type* : dt'*
-  -- (Import_ok: {TYPES dt'*} |- import : xt_I)*
+  -- (ImportMod_ok: {TYPES dt'*} |- importmod : xt_I)*
   ----
   -- (Tag_ok: C' |- tag : jt)*
   -- Globals_ok: C' |- global* : gt*

@@ -135,10 +135,11 @@ It decodes into the list of :ref:`recursive types <syntax-rectype>` of a :ref:`m
 $${grammar: {Btypesec Btype}}
 
 
-.. index:: ! import section, import, name, function type, table type, memory type, global type, tag type
+.. index:: ! import section, import module, import, name, function type, table type, memory type, global type, tag type
    pair: binary format; import
    pair: section; import
 .. _binary-import:
+.. _binary-importmod:
 .. _binary-importdesc:
 .. _binary-importsec:
 
@@ -146,9 +147,12 @@ Import Section
 ~~~~~~~~~~~~~~
 
 The *import section* has the id 2.
-It decodes into the list of :ref:`imports <syntax-import>` of a :ref:`module <syntax-module>`.
+It decodes into the list of :ref:`import modules <syntax-importmod>` of a :ref:`module <syntax-module>`.
 
-$${grammar: {Bimportsec Bimport}}
+$${grammar: {Bimportsec Bimportmod Bimport}}
+
+.. note::
+   The encoding of an import module beginning with ${:0x01 0xFF} allows multiple imports to be expressed without repeating the module name. ${:0x01 0xFF} decodes as an invalid :ref:`name <binary-name>` for compatibility with older implementations.
 
 
 .. index:: ! function section, function, type index, function type

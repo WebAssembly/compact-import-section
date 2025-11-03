@@ -59,6 +59,7 @@ Construct                                        Judgement
 :ref:`Data segment <valid-data>`                 :math:`C \vdashdata \data : \OKdata`
 :ref:`Data mode <valid-datamode>`                :math:`C \vdashdatamode \datamode : \OKdatamode`
 :ref:`Start function <valid-start>`              :math:`C \vdashstart \start : \OKstart`
+:ref:`Import module <valid-importmod>`           :math:`C \vdashimportmod \importmod : \externtype*`
 :ref:`Import <valid-import>`                     :math:`C \vdashimport \import : \externtype`
 :ref:`Export <valid-export>`                     :math:`C \vdashexport \export : \externtype`
 :ref:`Module <valid-module>`                     :math:`\vdashmodule \module : \externtype^\ast \rightarrow \externtype^\ast`

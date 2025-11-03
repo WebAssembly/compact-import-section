@@ -38,13 +38,16 @@ syntax start hint(desc "start function") =
   START funcidx
 
 syntax import hint(desc "import") =
-  IMPORT name name externtype
+  IMPORT name externtype
+
+syntax importmod hint(desc "import module") =
+  IMPORTMOD name import*
 
 syntax export hint(desc "export") =
   EXPORT name externidx
 
 syntax module hint(desc "module") =
-  MODULE type* import* tag* global* mem* table* func* data* elem* start? export*
+  MODULE type* importmod* tag* global* mem* table* func* data* elem* start? export*
 
 
 ;; Meta variables
@@ -72,6 +75,7 @@ def $free_datamode(datamode) : free
 def $free_elemmode(elemmode) : free
 def $free_start(start) : free
 def $free_import(import) : free
+def $free_importmod(importmod) : free
 def $free_export(export) : free
 def $free_module(module) : free
 
@@ -109,11 +113,12 @@ def $free_datamode(PASSIVE) = {}
 
 def $free_start(START funcidx) = $free_funcidx(funcidx)
 
-def $free_import(IMPORT name_1 name_2 externtype) = $free_externtype(externtype)
+def $free_import(IMPORT name externtype) = $free_externtype(externtype)
+def $free_importmod(IMPORTMOD name import) = $free_import(import)
 
 def $free_export(EXPORT name externidx) = $free_externidx(externidx)
 
-def $free_module(MODULE type* import* tag* global* mem* table* func* data* elem* start? export*) =
+def $free_module(MODULE type* importmod* tag* global* mem* table* func* data* elem* start? export*) =
   $free_list($free_type(type)*) ++
   $free_list($free_tag(tag)*) ++
   $free_list($free_global(global)*) ++
@@ -123,7 +128,7 @@ def $free_module(MODULE type* import* tag* global* mem* table* func* data* elem*
   $free_list($free_data(data)*) ++
   $free_list($free_elem(elem)*) ++
   $free_opt($free_start(start)?) ++
-  $free_list($free_import(import)*) ++
+  $free_list($free_importmod(importmod)*) ++
   $free_list($free_export(export)*)
 
 

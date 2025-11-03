@@ -193,11 +193,16 @@ $${rule: Start_ok}
    single: abstract syntax; import
 .. _valid-importdesc:
 .. _valid-import:
+.. _valid-importmod:
 
 Imports
 ~~~~~~~
 
-Imports ${:import} are classified by :ref:`external types <syntax-externtype>`.
+Import modules ${:importmod} and imports ${:import} are classified by :ref:`external types <syntax-externtype>`.
+
+$${rule-prose: ImportMod_ok}
+
+$${rule: ImportMod_ok}
 
 $${rule-prose: Import_ok}
 

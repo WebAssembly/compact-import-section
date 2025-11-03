@@ -32,10 +32,14 @@ grammar Btypesec : type* hint(desc "type section") =
 ;; Import section
 
 grammar Bimport : import =
-  | nm_1:Bname nm_2:Bname xt:Bexterntype => IMPORT nm_1 nm_2 xt
+  | nm_2:Bname xt:Bexterntype => IMPORT nm_2 xt
 
-grammar Bimportsec : import* hint(desc "import section") =
-  | im*:Bsection_(2, Blist(Bimport)) => im*
+grammar Bimportmod : importmod =
+  | nm_1:Bname im:Bimport => IMPORTMOD nm_1 im
+  | 0x01 0xFF nm_1:Bname im*:Blist(Bimport) => IMPORTMOD nm_1 im*
+
+grammar Bimportsec : importmod* hint(desc "import section") =
+  | mod*:Bsection_(2, Blist(Bimportmod)) => mod*
 
 
 ;; Function section
@@ -175,7 +179,7 @@ grammar Bversion : () = 0x01 0x00 0x00 0x00 => ()
 grammar Bmodule : module =
   | Bmagic Bversion
     Bcustomsec* type*:Btypesec
-    Bcustomsec* import*:Bimportsec
+    Bcustomsec* importmod*:Bimportsec
     Bcustomsec* typeidx*:Bfuncsec
     Bcustomsec* table*:Btablesec
     Bcustomsec* mem*:Bmemsec
@@ -188,7 +192,7 @@ grammar Bmodule : module =
     Bcustomsec* (local*, expr)*:Bcodesec
     Bcustomsec* data*:Bdatasec
     Bcustomsec* =>
-      MODULE type* import* tag* global* mem* table* func* data* elem* start? export*
+      MODULE type* importmod* tag* global* mem* table* func* data* elem* start? export*
     ----
     -- (if n = |data*|)?
     -- if (n? =/= eps \/ $dataidx_funcs(func*) = eps)
