@@ -357,7 +357,7 @@ $${grammar: Timportmod_/plain Timport_/plain}
 Abbreviations
 .............
 
-As an abbreviation, an import module with a single import may omit the parentheses around the import:
+As an abbreviation, an import module with a single import may omit the ${grammar-case: "(" "item" Tdecldots_ ")"} around the import:
 
 $${grammar: Timportmod_/abbrev-one}
 
@@ -439,6 +439,6 @@ $${definition-ignore: typesd importmodsd tagsd globalsd memsd tablesd funcsd dat
 Abbreviations
 .............
 
-In a source file, the toplevel ${grammar-case: "(" "module" Tdecldots ")"} surrounding the module body may be omitted.
+In a source file, the toplevel ${grammar-case: "(" "module" Tdecldots_ ")"} surrounding the module body may be omitted.
 
 $${grammar: Tmodule/abbrev}

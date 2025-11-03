@@ -131,7 +131,7 @@ grammar Tstart_(I) : (start, idctxt) =
 ;; Imports
 
 grammar Timport_(I)/plain : (import, idctxt) =
-  | "(" nm_2:Tname (xt,I'):Texterntype_(I) ")" => (IMPORT nm_2 xt, I')
+  | "(" "item" nm_2:Tname (xt,I'):Texterntype_(I) ")" => (IMPORT nm_2 xt, I')
 
 grammar Timportmod_(I)/plain : (importmod, idctxt) =
   | "(" "import" nm_1:Tname (import,I')*:Timport_(I)* ")" => (IMPORTMOD nm_1 import*, I')
