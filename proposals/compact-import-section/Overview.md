@@ -71,6 +71,8 @@ Depending on implementation, this could potentially reduce the size of modules i
 
 However, this change to the AST would complicate various aspects of the spec, including some changes to validation and execution, and particularly impacting the `module_imports` function in the Embedding appendix. In addition, it clashes with existing host APIs for imports, particularly the JS API's [Module.imports](https://webassembly.github.io/spec/js-api/index.html#dom-module-imports) function, which returns `{"module": "...", "name": "...", "kind": "..."}` triples. It would presumably be best to change the return value of this function if the structure of imports were to change, but this would be a quite incompatible change.
 
+An experimental specification for this approach can be found on the [ast-update](https://github.com/WebAssembly/compact-import-section/compare/a5f4a85c8...ast-update) branch.
+
 ### Add a new section ID
 
 Instead of using an invalid `name` (`0x01 0xFF`) to signify a run of compact imports, we could introduce a new section ID to the binary encoding. This would result in a cleaner and (very) slightly more compact encoding, but both forms of the import section would need to remain in the spec.
