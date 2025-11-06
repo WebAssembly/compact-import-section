@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Modules &#8212; WebAssembly 3.0 + compact-import-section (2025-11-03)</title>
+    <title>Modules &#8212; WebAssembly 3.0 (2025-11-06)</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=686e5160" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=057308f9" />
-    <script src="../_static/documentation_options.js?v=7058e868"></script>
+    <script src="../_static/documentation_options.js?v=818637df"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
@@ -224,19 +224,19 @@ It decodes into the list of <a class="reference internal" href="../syntax/types.
 \end{array}\end{split}\]</div>
 </section>
 <section id="import-section">
-<span id="binary-importsec"></span><span id="binary-importdesc"></span><span id="binary-importmod"></span><span id="binary-import"></span><span id="index-4"></span><h2>Import Section<a class="headerlink" href="#import-section" title="Link to this heading">¶</a></h2>
+<span id="binary-importsec"></span><span id="binary-importdesc"></span><span id="binary-imports"></span><span id="binary-import"></span><span id="index-4"></span><h2>Import Section<a class="headerlink" href="#import-section" title="Link to this heading">¶</a></h2>
 <p>The <em>import section</em> has the id 2.
-It decodes into the list of <a class="reference internal" href="../syntax/modules.html#syntax-importmod"><span class="std std-ref">import modules</span></a> of a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a>.</p>
+It decodes into the list of <a class="reference internal" href="../syntax/modules.html#syntax-import"><span class="std std-ref">imports</span></a> of a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a>.</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{array}[t]{&#64;{}l&#64;{}rrl&#64;{}l&#64;{}l&#64;{}l&#64;{}}
-&amp; {\href{../binary/modules.html#binary-importsec}{\mathtt{importsec}}} &amp; ::= &amp; {{\mathit{mod}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{2}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-importmod}{\mathtt{importmod}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{mod}}^\ast} \\
-&amp; {\href{../binary/modules.html#binary-importmod}{\mathtt{importmod}}} &amp; ::= &amp; {\mathit{nm}}_1{:}{\href{../binary/values.html#binary-name}{\mathtt{name}}}~~{\mathit{im}}{:}{\href{../binary/modules.html#binary-import}{\mathtt{import}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-importmod}{\mathsf{importmod}}~{\mathit{nm}}_1~{\mathit{im}} \\
-&amp; &amp; | &amp; \mathtt{0x01}~~\mathtt{0xFF}~~{\mathit{nm}}_1{:}{\href{../binary/values.html#binary-name}{\mathtt{name}}}~~{{\mathit{im}}^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-import}{\mathtt{import}}}) &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-importmod}{\mathsf{importmod}}~{\mathit{nm}}_1~{{\mathit{im}}^\ast} \\
-&amp; {\href{../binary/modules.html#binary-import}{\mathtt{import}}} &amp; ::= &amp; {\mathit{nm}}_2{:}{\href{../binary/values.html#binary-name}{\mathtt{name}}}~~{\mathit{xt}}{:}{\href{../binary/types.html#binary-externtype}{\mathtt{externtype}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-import}{\mathsf{import}}~{\mathit{nm}}_2~{\mathit{xt}} \\
+&amp; {\href{../binary/modules.html#binary-importsec}{\mathtt{importsec}}} &amp; ::= &amp; {{{\mathit{im}}^\ast}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{2}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-imports}{\mathtt{imports}}})) &amp; \quad\Rightarrow\quad{} &amp; {\href{../syntax/conventions.html#notation-concat}{\bigoplus}}\, {{{\mathit{im}}^\ast}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-imports}{\mathtt{imports}}} &amp; ::= &amp; {\mathit{nm}}_1{:}{\href{../binary/values.html#binary-name}{\mathtt{name}}}~~({\mathit{nm}}_2, {\mathit{xt}}){:}{\href{../binary/modules.html#binary-import}{\mathtt{import}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-import}{\mathsf{import}}~{\mathit{nm}}_1~{\mathit{nm}}_2~{\mathit{xt}} \\
+&amp; &amp; | &amp; \mathtt{0x01}~~\mathtt{0xFF}~~{\mathit{nm}}_1{:}{\href{../binary/values.html#binary-name}{\mathtt{name}}}~~{({\mathit{nm}}_2, {\mathit{xt}})^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-import}{\mathtt{import}}}) &amp; \quad\Rightarrow\quad{} &amp; {(\href{../syntax/modules.html#syntax-import}{\mathsf{import}}~{\mathit{nm}}_1~{\mathit{nm}}_2~{\mathit{xt}})^\ast} \\
+&amp; {\href{../binary/modules.html#binary-import}{\mathtt{import}}} &amp; ::= &amp; {\mathit{nm}}_2{:}{\href{../binary/values.html#binary-name}{\mathtt{name}}}~~{\mathit{xt}}{:}{\href{../binary/types.html#binary-externtype}{\mathtt{externtype}}} &amp; \quad\Rightarrow\quad{} &amp; ({\mathit{nm}}_2, {\mathit{xt}}) \\
 \end{array}\end{split}\]</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The encoding of an import module beginning with <span class="math notranslate nohighlight">\(\mathtt{0x01}~\mathtt{0xFF}\)</span> allows multiple imports to be expressed without repeating the module name. <span class="math notranslate nohighlight">\(\mathtt{0x01}~\mathtt{0xFF}\)</span> decodes as an invalid <a class="reference internal" href="values.html#binary-name"><span class="std std-ref">name</span></a> for compatibility with older implementations.</p>
+<p>The encoding of <a class="reference internal" href="#binary-imports"><span class="std std-ref">imports</span></a> beginning with <span class="math notranslate nohighlight">\(\mathtt{0x01}~\mathtt{0xFF}\)</span> allows multiple imports to be expressed without repeating the module name. <span class="math notranslate nohighlight">\(\mathtt{0x01}~\mathtt{0xFF}\)</span> decodes as an invalid <a class="reference internal" href="values.html#binary-name"><span class="std std-ref">name</span></a> for compatibility with older implementations.</p>
 </div>
 </section>
 <section id="function-section">
@@ -474,7 +474,7 @@ Furthermore, it must be present if any <a class="reference internal" href="../sy
 &amp; {\href{../binary/modules.html#binary-version}{\mathtt{version}}} &amp; ::= &amp; \mathtt{0x01}~~\mathtt{0x00}~~\mathtt{0x00}~~\mathtt{0x00} \\
 &amp; {\href{../binary/modules.html#binary-module}{\mathtt{module}}} &amp; ::= &amp; \begin{array}[t]{&#64;{}l&#64;{}} {\href{../binary/modules.html#binary-magic}{\mathtt{magic}}}~~{\href{../binary/modules.html#binary-version}{\mathtt{version}}} \\
   {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/types.html#syntax-rectype}{\mathit{type}}}^\ast}{:}{\href{../binary/modules.html#binary-typesec}{\mathtt{typesec}}} \\
-  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-importmod}{\mathit{importmod}}}^\ast}{:}{\href{../binary/modules.html#binary-importsec}{\mathtt{importsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-import}{\mathit{import}}}^\ast}{:}{\href{../binary/modules.html#binary-importsec}{\mathtt{importsec}}} \\
   {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}^\ast}{:}{\href{../binary/modules.html#binary-funcsec}{\mathtt{funcsec}}} \\
   {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-table}{\mathit{table}}}^\ast}{:}{\href{../binary/modules.html#binary-tablesec}{\mathtt{tablesec}}} \\
   {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-mem}{\mathit{mem}}}^\ast}{:}{\href{../binary/modules.html#binary-memsec}{\mathtt{memsec}}} \\
@@ -489,7 +489,7 @@ Furthermore, it must be present if any <a class="reference internal" href="../sy
   {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast} \end{array} &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
 &amp;&amp;&amp; \multicolumn{4}{&#64;{}l&#64;{}}{\quad
 \begin{array}[t]{&#64;{}l&#64;{}l&#64;{}l&#64;{}}
-\href{../syntax/modules.html#syntax-module}{\mathsf{module}}~{{\href{../syntax/types.html#syntax-rectype}{\mathit{type}}}^\ast}~{{\href{../syntax/modules.html#syntax-importmod}{\mathit{importmod}}}^\ast}~{{\href{../syntax/modules.html#syntax-tag}{\mathit{tag}}}^\ast}~{{\href{../syntax/modules.html#syntax-global}{\mathit{global}}}^\ast}~{{\href{../syntax/modules.html#syntax-mem}{\mathit{mem}}}^\ast}~{{\href{../syntax/modules.html#syntax-table}{\mathit{table}}}^\ast}~{{\href{../syntax/modules.html#syntax-func}{\mathit{func}}}^\ast}~{{\href{../syntax/modules.html#syntax-data}{\mathit{data}}}^\ast}~{{\href{../syntax/modules.html#syntax-elem}{\mathit{elem}}}^\ast}~{{\href{../syntax/modules.html#syntax-start}{\mathit{start}}}^?}~{{\href{../syntax/modules.html#syntax-export}{\mathit{export}}}^\ast} &amp; &amp; \\
+\href{../syntax/modules.html#syntax-module}{\mathsf{module}}~{{\href{../syntax/types.html#syntax-rectype}{\mathit{type}}}^\ast}~{{\href{../syntax/modules.html#syntax-import}{\mathit{import}}}^\ast}~{{\href{../syntax/modules.html#syntax-tag}{\mathit{tag}}}^\ast}~{{\href{../syntax/modules.html#syntax-global}{\mathit{global}}}^\ast}~{{\href{../syntax/modules.html#syntax-mem}{\mathit{mem}}}^\ast}~{{\href{../syntax/modules.html#syntax-table}{\mathit{table}}}^\ast}~{{\href{../syntax/modules.html#syntax-func}{\mathit{func}}}^\ast}~{{\href{../syntax/modules.html#syntax-data}{\mathit{data}}}^\ast}~{{\href{../syntax/modules.html#syntax-elem}{\mathit{elem}}}^\ast}~{{\href{../syntax/modules.html#syntax-start}{\mathit{start}}}^?}~{{\href{../syntax/modules.html#syntax-export}{\mathit{export}}}^\ast} &amp; &amp; \\
  \multicolumn{3}{&#64;{}l&#64;{}}{\quad
 \begin{array}[t]{&#64;{}l&#64;{}}
 \quad
