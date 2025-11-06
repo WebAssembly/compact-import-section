@@ -12,7 +12,7 @@ This proposal aims to solve this problem through a small change to the binary fo
 
 ### Binary
 
-An import module with multiple imports is encoded by: the byte sequence `0x01 0xFF`, the module name, and a [list](https://webassembly.github.io/spec/core/binary/conventions.html#binary-list) (vec) of imports. The previous encoding is redefined to produce an import module with a single import.
+A compact group of imports with a common module name is encoded by: the byte sequence `0x01 0xFF`, the module name, and a [list](https://webassembly.github.io/spec/core/binary/conventions.html#binary-list) (vec) of imports. The previous encoding is redefined to produce a group with a single import.
 
 The byte sequence `0x01 0xFF` will be decoded by existing implementations as an invalid [`name`](https://webassembly.github.io/spec/core/binary/values.html#binary-name) consisting only of `0xFF`. Since `0xFF` is not valid in UTF-8, this name should always be rejected by current implementations, and the new encoding is therefore backwards-compatible. Additionally, no new section ID is required.
 
@@ -22,28 +22,20 @@ importsec ::== section_2(list(import))
 import    ::== name name externtype
 
 ;; After
-importsec ::== section_2(list(importmod))
-importmod ::== name import                  ;; single-item encoding (existing)
+importsec ::== section_2(list(imports))
+imports   ::== name import                  ;; single-item encoding (existing)
              | 0x01 0xFF name list(import)  ;; multiple-item compact encoding
 import    ::== name externtype
 ```
 
 ### Text format
 
-The `import` keyword is redefined to produce an import module instead of an import. Individual imports within a module are specified with `(item ...)`. The existing `(import "foo" "bar" ...)` syntax is included as an abbreviation for `(import "foo" (item "bar" ...))`.
+A new form of the `import` declaration is added that produces a list of imports, and implicitly maps to the compact encoding. The existing syntax remains valid and maps to the non-compact encoding.
 
 ```
-;; Before
-(import "mod" "foo" ...)
-(import "mod" "bar" ...)
-
-;; After
-(import "mod" (item "foo" ...) (item "bar" ...))
+(import "mod" (item "foo" ...) (item "bar" ...)) ;; new; maps to compact encoding
+(import "mod" "foo" ...)                         ;; existing; maps to non-compact encoding
 ```
-
-The existing import abbreviations, e.g. `(global (import "foo" "bar") ...)`, will continue to use the non-compact encoding.
-
-It is expected that the different text encodings and the different binary encodings will be one-to-one; that is, the `item` format always corresponds to the compact import encoding, and the legacy abbreviation always corresponds to the non-compact encoding. This ensures that data will round-trip correctly through the text format.
 
 ### Syntax, Validation, Execution
 
