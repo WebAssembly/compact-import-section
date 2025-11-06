@@ -12024,8 +12024,10 @@ $$
 
 $$
 \begin{array}[t]{@{}lrrl@{}l@{}l@{}l@{}}
-& {\mathtt{import}} & ::= & {\mathit{nm}}_1{:}{\mathtt{name}}~~{\mathit{nm}}_2{:}{\mathtt{name}}~~{\mathit{xt}}{:}{\mathtt{externtype}} & \quad\Rightarrow\quad{} & \mathsf{import}~{\mathit{nm}}_1~{\mathit{nm}}_2~{\mathit{xt}} \\
-\mbox{(import section)} & {\mathtt{importsec}} & ::= & {{\mathit{im}}^\ast}{:}{{\mathtt{section}}}_{2}({\mathtt{list}}({\mathtt{import}})) & \quad\Rightarrow\quad{} & {{\mathit{im}}^\ast} \\
+& {\mathtt{import}} & ::= & {\mathit{nm}}_2{:}{\mathtt{name}}~~{\mathit{xt}}{:}{\mathtt{externtype}} & \quad\Rightarrow\quad{} & ({\mathit{nm}}_2, {\mathit{xt}}) \\
+& {\mathtt{imports}} & ::= & {\mathit{nm}}_1{:}{\mathtt{name}}~~({\mathit{nm}}_2, {\mathit{xt}}){:}{\mathtt{import}} & \quad\Rightarrow\quad{} & \mathsf{import}~{\mathit{nm}}_1~{\mathit{nm}}_2~{\mathit{xt}} \\
+& & | & \mathtt{0x01}~~\mathtt{0xFF}~~{\mathit{nm}}_1{:}{\mathtt{name}}~~{({\mathit{nm}}_2, {\mathit{xt}})^\ast}{:}{\mathtt{list}}({\mathtt{import}}) & \quad\Rightarrow\quad{} & {(\mathsf{import}~{\mathit{nm}}_1~{\mathit{nm}}_2~{\mathit{xt}})^\ast} \\
+\mbox{(import section)} & {\mathtt{importsec}} & ::= & {{{\mathit{im}}^\ast}^\ast}{:}{{\mathtt{section}}}_{2}({\mathtt{list}}({\mathtt{imports}})) & \quad\Rightarrow\quad{} & {\bigoplus}\, {{{\mathit{im}}^\ast}^\ast} \\
 \end{array}
 $$
 
@@ -13581,6 +13583,13 @@ $$
 $$
 \begin{array}[t]{@{}lrrl@{}l@{}l@{}l@{}}
 & {{\mathtt{import}}}_{I} & ::= & \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{import}’}~~{\mathit{nm}}_1{:}{\mathtt{name}}~~{\mathit{nm}}_2{:}{\mathtt{name}}~~({\mathit{xt}}, {I'}){:}{{\mathtt{externtype}}}_{I}~~\mbox{‘\texttt{{)}}’} & \quad\Rightarrow\quad{} & (\mathsf{import}~{\mathit{nm}}_1~{\mathit{nm}}_2~{\mathit{xt}}, {I'}) \\
+& {{\mathtt{imports}}}_{I} & ::= & \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{import}’}~~{\mathit{nm}}_1{:}{\mathtt{name}}~~{(\mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{item}’}~~{\mathit{nm}}_2{:}{\mathtt{name}}~~{{\mathtt{externtype}}}_{I}~~\mbox{‘\texttt{{)}}’})^\ast}~~\mbox{‘\texttt{{)}}’} & \quad\equiv\quad{} & & \\
+&&& \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+{(\mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{import}’}~~{\mathit{nm}}_1{:}{\mathtt{name}}~~{\mathit{nm}}_2{:}{\mathtt{name}}~~{{\mathtt{externtype}}}_{I}~~\mbox{‘\texttt{{)}}’})^\ast} \\
+\end{array}
+} \\
+& {{\mathtt{import}}}_{I} & ::= & \dots \\
 & & | & \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{tag}’}~~{{\mathtt{id}}^?}~~\mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{import}’}~~{{\mathtt{name}}^{2}}~~\mbox{‘\texttt{{)}}’}~~{{\mathtt{tagtype}}}_{I}~~\mbox{‘\texttt{{)}}’} & \quad\equiv\quad{} & & \\
 &&& \multicolumn{4}{@{}l@{}}{\quad
 \begin{array}[t]{@{}l@{}}

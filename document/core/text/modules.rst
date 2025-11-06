@@ -344,6 +344,7 @@ $${grammar: Tstart_}
 .. index:: import, name, tag type, global type, memory type, table type, function type
    pair: text format; import
 .. _text-import:
+.. _text-imports:
 
 Imports
 ~~~~~~~
@@ -356,7 +357,11 @@ $${grammar: Timport_/plain}
 Abbreviations
 .............
 
-As an abbreviation, imports may also be specified inline with
+Multiple imports with the same ${:nm_1} may be declared together:
+
+$${grammar: Timports_/abbrev}
+
+Imports may also be specified inline with
 :ref:`tag <text-tag>`,
 :ref:`global <text-global>`,
 :ref:`memory <text-mem>`,

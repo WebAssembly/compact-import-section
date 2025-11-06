@@ -134,6 +134,10 @@ grammar Timport_(I)/plain : (import, idctxt) =
   | "(" "import" nm_1:Tname nm_2:Tname (xt,I'):Texterntype_(I) ")" => (IMPORT nm_1 nm_2 xt, I')
   | ...
 
+grammar Timports_(I)/abbrev : (import*, idctxt) =
+  | "(" "import" nm_1:Tname ("(" "item" nm_2:Tname Texterntype_(I) ")")* ")" ==
+    ("(" "import" nm_1:Tname nm_2:Tname Texterntype_(I) ")")*
+
 grammar Timport_(I)/abbrev-tag : (import, idctxt) = ...
   | "(" "tag" Tid? "(" "import" Tname^2 ")" Ttagtype_(I) ")" ==
     "(" "import" Tname^2 "(" "tag" Tid? Ttagtype_(I) ")" ")"
@@ -157,7 +161,6 @@ grammar Timport_(I)/abbrev-table : (import, idctxt) = ...
 grammar Timport_(I)/abbrev-func : (import, idctxt) = ...
   | "(" "func" Tid? "(" "import" Tname^2 ")" Ttypeuse_(I) ")" ==
     "(" "import" Tname^2 "(" "func" Tid? Ttypeuse_(I) ")" ")"
-
 
 ;; Exports
 
