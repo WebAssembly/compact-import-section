@@ -36,10 +36,10 @@ grammar Bimport : (name, externtype) =
 
 grammar Bimports : import* =
   | nm_1:Bname (nm_2, xt):Bimport => IMPORT nm_1 nm_2 xt
-  | 0x01 0xFF nm_1:Bname (nm_2, xt)*:Blist(Bimport) => $concat_(import, IMPORT nm_1 nm_2 xt)
+  | 0x01 0xFF nm_1:Bname (nm_2, xt)*:Blist(Bimport) => (IMPORT nm_1 nm_2 xt)*
 
 grammar Bimportsec : import* hint(desc "import section") =
-  | im*:Bsection_(2, Blist(Bimports)) => im*
+  | im**:Bsection_(2, Blist(Bimports)) => $concat_(import, im**)
 
 
 ;; Function section

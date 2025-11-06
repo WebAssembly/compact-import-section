@@ -1072,6 +1072,7 @@
 .. |Tglobal| mathdef:: \xref{text/modules}{text-global}{\T{global}}
 .. |Ttag| mathdef:: \xref{text/modules}{text-tag}{\T{tag}}
 .. |Timport| mathdef:: \xref{text/modules}{text-import}{\T{import}}
+.. |Timports| mathdef:: \xref{text/modules}{text-imports}{\T{imports}}
 .. |Texport| mathdef:: \xref{text/modules}{text-export}{\T{export}}
 .. |Texternidx| mathdef:: \xref{text/modules}{text-externidx}{\T{externidx}}
 .. |Telem| mathdef:: \xref{text/modules}{text-elem}{\T{elem}}
