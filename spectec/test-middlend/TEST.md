@@ -8707,7 +8707,8 @@ grammar Bimports : import*
   ;; ../../../../specification/wasm-3.0/5.4-binary.modules.spectec
   prod{nm_1 : name, nm_2 : name, xt : externtype} {{nm_1:Bname} {(nm_2, xt):Bimport}} => [IMPORT_import(nm_1, nm_2, xt)]
   ;; ../../../../specification/wasm-3.0/5.4-binary.modules.spectec
-  prod{nm_1 : name, `nm_2*` : name*, `xt*` : externtype*} {{0x01} {0xFF} {nm_1:Bname} {(nm_2, xt)*{nm_2 <- `nm_2*`, xt <- `xt*`}:Blist(syntax (name, externtype), grammar Bimport)}} => IMPORT_import(nm_1, nm_2, xt)*{nm_2 <- `nm_2*`, xt <- `xt*`}
+  prod{nm_1 : name, nm_e : name, `nm_2*` : name*, `xt*` : externtype*} {{nm_1:Bname} {nm_e:Bname} {0x7F} {(nm_2, xt)*{nm_2 <- `nm_2*`, xt <- `xt*`}:Blist(syntax (name, externtype), grammar Bimport)}} => IMPORT_import(nm_1, nm_2, xt)*{nm_2 <- `nm_2*`, xt <- `xt*`}
+    -- if (nm_e = `%`_name([]))
 
 ;; ../../../../specification/wasm-3.0/5.4-binary.modules.spectec
 grammar Bimportsec : import*
@@ -20058,7 +20059,8 @@ grammar Bimports : import*
   ;; ../../../../specification/wasm-3.0/5.4-binary.modules.spectec
   prod{nm_1 : name, nm_2 : name, xt : externtype} {{nm_1:Bname} {(nm_2, xt):Bimport}} => [IMPORT_import(nm_1, nm_2, xt)]
   ;; ../../../../specification/wasm-3.0/5.4-binary.modules.spectec
-  prod{nm_1 : name, `nm_2*` : name*, `xt*` : externtype*} {{0x01} {0xFF} {nm_1:Bname} {(nm_2, xt)*{nm_2 <- `nm_2*`, xt <- `xt*`}:Blist(syntax (name, externtype), grammar Bimport)}} => IMPORT_import(nm_1, nm_2, xt)*{nm_2 <- `nm_2*`, xt <- `xt*`}
+  prod{nm_1 : name, nm_e : name, `nm_2*` : name*, `xt*` : externtype*} {{nm_1:Bname} {nm_e:Bname} {0x7F} {(nm_2, xt)*{nm_2 <- `nm_2*`, xt <- `xt*`}:Blist(syntax (name, externtype), grammar Bimport)}} => IMPORT_import(nm_1, nm_2, xt)*{nm_2 <- `nm_2*`, xt <- `xt*`}
+    -- if (nm_e = `%`_name([]))
 
 ;; ../../../../specification/wasm-3.0/5.4-binary.modules.spectec
 grammar Bimportsec : import*
@@ -31588,7 +31590,8 @@ grammar Bimports : import*
   ;; ../../../../specification/wasm-3.0/5.4-binary.modules.spectec
   prod{nm_1 : name, nm_2 : name, xt : externtype} {{nm_1:Bname} {(nm_2, xt):Bimport}} => [IMPORT_import(nm_1, nm_2, xt)]
   ;; ../../../../specification/wasm-3.0/5.4-binary.modules.spectec
-  prod{nm_1 : name, `nm_2*` : name*, `xt*` : externtype*} {{0x01} {0xFF} {nm_1:Bname} {(nm_2, xt)*{nm_2 <- `nm_2*`, xt <- `xt*`}:Blist(syntax (name, externtype), grammar Bimport)}} => IMPORT_import(nm_1, nm_2, xt)*{nm_2 <- `nm_2*`, xt <- `xt*`}
+  prod{nm_1 : name, nm_e : name, `nm_2*` : name*, `xt*` : externtype*} {{nm_1:Bname} {nm_e:Bname} {0x7F} {(nm_2, xt)*{nm_2 <- `nm_2*`, xt <- `xt*`}:Blist(syntax (name, externtype), grammar Bimport)}} => IMPORT_import(nm_1, nm_2, xt)*{nm_2 <- `nm_2*`, xt <- `xt*`}
+    -- if (nm_e = `%`_name([]))
 
 ;; ../../../../specification/wasm-3.0/5.4-binary.modules.spectec
 grammar Bimportsec : import*
