@@ -152,7 +152,7 @@ It decodes into the list of :ref:`imports <syntax-import>` of a :ref:`module <sy
 $${grammar: {Bimportsec Bimports Bimport}}
 
 .. note::
-   The encoding of :ref:`imports <binary-imports>` beginning with ${:0x01 0xFF} allows multiple imports to be expressed without repeating the module name. ${:0x01 0xFF} decodes as an invalid :ref:`name <binary-name>` for compatibility with older implementations.
+   The encoding of :ref:`imports <binary-imports>` containing ${:0x7F} allows multiple imports to be encoded without repeating the module name. Because ${:0x7F} is not a valid encoding for an :ref:`external type <binary-externtype>`, the encoding is unambiguous.
 
 
 .. index:: ! function section, function, type index, function type

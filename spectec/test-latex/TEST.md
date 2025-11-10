@@ -12026,7 +12026,7 @@ $$
 \begin{array}[t]{@{}lrrl@{}l@{}l@{}l@{}}
 & {\mathtt{import}} & ::= & {\mathit{nm}}_2{:}{\mathtt{name}}~~{\mathit{xt}}{:}{\mathtt{externtype}} & \quad\Rightarrow\quad{} & ({\mathit{nm}}_2, {\mathit{xt}}) \\
 & {\mathtt{imports}} & ::= & {\mathit{nm}}_1{:}{\mathtt{name}}~~({\mathit{nm}}_2, {\mathit{xt}}){:}{\mathtt{import}} & \quad\Rightarrow\quad{} & \mathsf{import}~{\mathit{nm}}_1~{\mathit{nm}}_2~{\mathit{xt}} \\
-& & | & \mathtt{0x01}~~\mathtt{0xFF}~~{\mathit{nm}}_1{:}{\mathtt{name}}~~{({\mathit{nm}}_2, {\mathit{xt}})^\ast}{:}{\mathtt{list}}({\mathtt{import}}) & \quad\Rightarrow\quad{} & {(\mathsf{import}~{\mathit{nm}}_1~{\mathit{nm}}_2~{\mathit{xt}})^\ast} \\
+& & | & {\mathit{nm}}_1{:}{\mathtt{name}}~~{\mathit{nm}}_e{:}{\mathtt{name}}~~\mathtt{0x7F}~~{({\mathit{nm}}_2, {\mathit{xt}})^\ast}{:}{\mathtt{list}}({\mathtt{import}}) & \quad\Rightarrow\quad{} & {(\mathsf{import}~{\mathit{nm}}_1~{\mathit{nm}}_2~{\mathit{xt}})^\ast} & \quad \mbox{if}~ {\mathit{nm}}_e = \epsilon \\
 \mbox{(import section)} & {\mathtt{importsec}} & ::= & {{{\mathit{im}}^\ast}^\ast}{:}{{\mathtt{section}}}_{2}({\mathtt{list}}({\mathtt{imports}})) & \quad\Rightarrow\quad{} & {\bigoplus}\, {{{\mathit{im}}^\ast}^\ast} \\
 \end{array}
 $$
