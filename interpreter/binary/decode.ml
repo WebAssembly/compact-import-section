@@ -16,11 +16,14 @@ let pos s = !(s.pos)
 let eos s = (pos s = len s)
 let reset s pos = s.pos := pos
 
-let check n s = if pos s + n > len s then raise EOS
+let has n s = (pos s + n > len s)
+let check n s = if has n s then raise EOS
 let skip n s = if n < 0 then raise EOS else check n s; s.pos := !(s.pos) + n
 
-let read s = Char.code (s.bytes.[!(s.pos)])
+let read_n n s = Char.code (s.bytes.[!(s.pos) + n])
+let read s = read_n 0 s
 let peek s = if eos s then None else Some (read s)
+let peek_n n s = if has n s then Some (read_n n s) else None
 let get s = check 1 s; let b = read s in skip 1 s; b
 let get_string n s = let i = pos s in skip n s; String.sub s.bytes i n
 
@@ -1028,13 +1031,22 @@ let type_section s =
 (* Import section *)
 
 let import s =
-  let module_name = name s in
   let item_name = name s in
   let xt = externtype s in
-  Import (module_name, item_name, xt)
+  (item_name, xt)
+
+let imports s =
+  if (peek_n 0 s = Some 0x01) && (peek_n 1 s = Some 0xFF) then
+    let module_name = name s in
+    let imports = vec (at import) s in
+    List.map (fun { it = (item_name, xt); at } -> Import (module_name, item_name, xt) @@ at) imports
+  else
+    let module_name = name s in
+    let { it = (item_name, xt); at } = (at import) s in
+    [Import (module_name, item_name, xt) @@ at]
 
 let import_section s =
-  section Custom.Import (vec (at import)) [] s
+  section Custom.Import (fun s -> List.flatten (vec imports s)) [] s
 
 
 (* Function section *)

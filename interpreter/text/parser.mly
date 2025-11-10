@@ -1249,10 +1249,20 @@ externtype :
     { fun c -> ignore ($3 c anon_func bind_func);
       fun () -> ExternFuncT (Idx (inline_functype c ($4 c) $loc($4)).it) }
 
-import :
+imports :
   | LPAR IMPORT name name externtype RPAR
     { fun c -> let df = $5 c in
-      fun () -> Import ($3, $4, df ()) @@ $sloc }
+      fun () -> [Import ($3, $4, df ()) @@ $sloc] }
+  | LPAR IMPORT name import_item_list RPAR
+    { fun c -> let items = $4 c in
+      fun () -> List.map (fun (nm, df, loc) -> Import($3, nm, df) @@ loc) items }
+
+import_item_list :
+  | /* empty */ { fun c -> [] }
+  | import_item import_item_list { fun c -> $1 c :: $2 c }
+
+import_item :
+  | LPAR ITEM name externtype RPAR { fun c -> ($3, $4 c (), $loc) }
 
 inline_import :
   | LPAR IMPORT name name RPAR { $3, $4 }
@@ -1374,11 +1384,11 @@ module_fields1 :
       match m.start with
       | Some _ -> error x.at "multiple start sections"
       | None -> {m with start = Some x} }
-  | import module_fields
+  | imports module_fields
     { fun c -> let imf = $1 c in let mff = $2 c in
       fun () -> let mf = mff () in
-      fun () -> let im = imf () in let m = mf () in
-      {m with imports = im :: m.imports} }
+      fun () -> let ims = imf () in let m = mf () in
+      {m with imports = ims @ m.imports} }
   | export module_fields
     { fun c -> let mff = $2 c in
       fun () -> let mf = mff () in
