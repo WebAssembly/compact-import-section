@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Modules &#8212; WebAssembly 3.0 (2025-11-06)</title>
+    <title>Modules &#8212; WebAssembly 3.0 (2025-11-10)</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=686e5160" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=057308f9" />
-    <script src="../_static/documentation_options.js?v=818637df"></script>
+    <script src="../_static/documentation_options.js?v=6cceb052"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
@@ -231,12 +231,12 @@ It decodes into the list of <a class="reference internal" href="../syntax/module
 \[\begin{split}\begin{array}[t]{&#64;{}l&#64;{}rrl&#64;{}l&#64;{}l&#64;{}l&#64;{}}
 &amp; {\href{../binary/modules.html#binary-importsec}{\mathtt{importsec}}} &amp; ::= &amp; {{{\mathit{im}}^\ast}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{2}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-imports}{\mathtt{imports}}})) &amp; \quad\Rightarrow\quad{} &amp; {\href{../syntax/conventions.html#notation-concat}{\bigoplus}}\, {{{\mathit{im}}^\ast}^\ast} \\
 &amp; {\href{../binary/modules.html#binary-imports}{\mathtt{imports}}} &amp; ::= &amp; {\mathit{nm}}_1{:}{\href{../binary/values.html#binary-name}{\mathtt{name}}}~~({\mathit{nm}}_2, {\mathit{xt}}){:}{\href{../binary/modules.html#binary-import}{\mathtt{import}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-import}{\mathsf{import}}~{\mathit{nm}}_1~{\mathit{nm}}_2~{\mathit{xt}} \\
-&amp; &amp; | &amp; \mathtt{0x01}~~\mathtt{0xFF}~~{\mathit{nm}}_1{:}{\href{../binary/values.html#binary-name}{\mathtt{name}}}~~{({\mathit{nm}}_2, {\mathit{xt}})^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-import}{\mathtt{import}}}) &amp; \quad\Rightarrow\quad{} &amp; {(\href{../syntax/modules.html#syntax-import}{\mathsf{import}}~{\mathit{nm}}_1~{\mathit{nm}}_2~{\mathit{xt}})^\ast} \\
+&amp; &amp; | &amp; {\mathit{nm}}_1{:}{\href{../binary/values.html#binary-name}{\mathtt{name}}}~~{\mathit{nm}}_e{:}{\href{../binary/values.html#binary-name}{\mathtt{name}}}~~\mathtt{0x7F}~~{({\mathit{nm}}_2, {\mathit{xt}})^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-import}{\mathtt{import}}}) &amp; \quad\Rightarrow\quad{} &amp; {(\href{../syntax/modules.html#syntax-import}{\mathsf{import}}~{\mathit{nm}}_1~{\mathit{nm}}_2~{\mathit{xt}})^\ast} &amp; \quad \mbox{if}~ {\mathit{nm}}_e = \epsilon \\
 &amp; {\href{../binary/modules.html#binary-import}{\mathtt{import}}} &amp; ::= &amp; {\mathit{nm}}_2{:}{\href{../binary/values.html#binary-name}{\mathtt{name}}}~~{\mathit{xt}}{:}{\href{../binary/types.html#binary-externtype}{\mathtt{externtype}}} &amp; \quad\Rightarrow\quad{} &amp; ({\mathit{nm}}_2, {\mathit{xt}}) \\
 \end{array}\end{split}\]</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The encoding of <a class="reference internal" href="#binary-imports"><span class="std std-ref">imports</span></a> beginning with <span class="math notranslate nohighlight">\(\mathtt{0x01}~\mathtt{0xFF}\)</span> allows multiple imports to be expressed without repeating the module name. <span class="math notranslate nohighlight">\(\mathtt{0x01}~\mathtt{0xFF}\)</span> decodes as an invalid <a class="reference internal" href="values.html#binary-name"><span class="std std-ref">name</span></a> for compatibility with older implementations.</p>
+<p>The encoding of <a class="reference internal" href="#binary-imports"><span class="std std-ref">imports</span></a> containing <span class="math notranslate nohighlight">\(\mathtt{0x7F}\)</span> allows multiple imports to be encoded without repeating the module name. Because <span class="math notranslate nohighlight">\(\mathtt{0x7F}\)</span> is not a valid encoding for an <a class="reference internal" href="types.html#binary-externtype"><span class="std std-ref">external type</span></a>, the encoding is unambiguous.</p>
 </div>
 </section>
 <section id="function-section">
