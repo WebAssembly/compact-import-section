@@ -12,21 +12,23 @@ This proposal aims to solve this problem through a small change to the binary fo
 
 ### Binary
 
-A compact group of imports with a common module name is encoded by: the byte sequence `0x01 0xFF`, the module name, and a [list](https://webassembly.github.io/spec/core/binary/conventions.html#binary-list) (vec) of imports. The previous encoding is redefined to produce a group with a single import.
-
-The byte sequence `0x01 0xFF` will be decoded by existing implementations as an invalid [`name`](https://webassembly.github.io/spec/core/binary/values.html#binary-name) consisting only of `0xFF`. Since `0xFF` is not valid in UTF-8, this name should always be rejected by current implementations, and the new encoding is therefore backwards-compatible. Additionally, no new section ID is required.
+A compact group of imports with a common module name is encoded by: the module name, an empty name, the byte `0x7F` (in place of the externtype), and a [list](https://webassembly.github.io/spec/core/binary/conventions.html#binary-list) (vec) of import items. The previous encoding still produces a single import.
 
 ```
 ;; Before
 importsec ::== section_2(list(import))
-import    ::== name name externtype
+import    ::== nm1:name nm2:name externtype
 
 ;; After
 importsec ::== section_2(list(imports))
-imports   ::== name import                  ;; single-item encoding (existing)
-             | 0x01 0xFF name list(import)  ;; multiple-item compact encoding
-import    ::== name externtype
+imports   ::== nm1:name import                                     ;; single-item encoding (existing)
+             | nm1:name nm2:name 0x7F list(import)  -- if nm2 = "" ;; multiple-item compact encoding
+import    ::== nm2:name externtype
 ```
+
+The `0x7F` will cause existing implementations to fail with "unknown import type" or similar, making this change backward-compatible. The value of `7F` is chosen so that this byte may be reinterpreted as LEB128 in the future.
+
+The expected overall cost of this encoding is just three or four bytes: `0x00` for the empty name, `0x7F` to signal the compact encoding, and likely no more than two bytes for the number of import items to follow. As any redundant module name must be at least one byte (for a zero-length name), this encoding should easily pay for itself.
 
 ### Text format
 
@@ -59,7 +61,7 @@ importmod ::== name import*
 module    ::== ... importmod* ...
 ```
 
-Depending on implementation, this could potentially reduce the size of modules in memory. In addition, the ["read the imports"](https://webassembly.github.io/spec/js-api/#read-the-imports) section of the JS API could be updated to reflect the AST, dispatching only one [[Get]] to the imports object for each `importmod`, resulting in fewer object accesses overall. This could potentially have performance improvements in JS engines.
+Depending on implementation, this could potentially reduce the size of modules in memory. In addition, the ["read the imports"](https://webassembly.github.io/spec/js-api/#read-the-imports) section of the JS API could be updated to reflect the AST, dispatching only one [[Get]] to the imports object for each `importmod`, resulting in fewer object accesses overall. This could potentially have performance benefits in JS engines.
 
 However, this change to the AST would complicate various aspects of the spec, including some changes to validation and execution, and particularly impacting the `module_imports` function in the Embedding appendix. In addition, it clashes with existing host APIs for imports, particularly the JS API's [Module.imports](https://webassembly.github.io/spec/js-api/index.html#dom-module-imports) function, which returns `{"module": "...", "name": "...", "kind": "..."}` triples. It would presumably be best to change the return value of this function if the structure of imports were to change, but this would be a quite incompatible change.
 
@@ -67,9 +69,11 @@ An experimental specification for this approach can be found on the [ast-update]
 
 ### Add a new section ID
 
-Instead of using an invalid `name` (`0x01 0xFF`) to signify a run of compact imports, we could introduce a new section ID to the binary encoding. This would result in a cleaner and (very) slightly more compact encoding, but both forms of the import section would need to remain in the spec.
+Instead of using an invalid `externtype` to signify a run of compact imports, we could introduce a new section ID to the binary encoding. This would result in a very slightly more compact encoding, but both forms of the import section would need to remain in the spec.
 
-Also, if adding a new section ID, it is less clear how the binary encoding would map to the text encoding. This proposal specifies that `(import "foo" (item "bar" ...))` will use the compact encoding, and `(import "foo" "bar" ...)` will use the non-compact encoding. Consider, then, this set of imports in the text format:
+In our opinion, the proposed change is small enough that no new section ID is warranted. Introducing multiple section IDs would complicate toolchains for dubious benefit. Furthermore, the new encoding leaves the door open for future extensions to the import section, such as arbitrary levels of namespacing, by adding more alternatives to the `0x7F` byte.
+
+Consider one example of difficulty caused by a new section id: This proposal suggests that `(import "foo" (item "bar" ...))` should use the compact encoding, and `(import "foo" "bar" ...)` should use the non-compact encoding. Consider, then, this set of imports in the text format:
 
 ```
 (import "foo" "bar" ...)
@@ -77,4 +81,4 @@ Also, if adding a new section ID, it is less clear how the binary encoding would
 (import "beep" "boop" ...)
 ```
 
-If the encodings are mixed, but must appear in separate sections, then it will not be possible to preserve the order of imports when round-tripping through the binary format. Either additional ordering information would be required, which would be superfluous, or perhaps the non-`(item)` form would simply use the compact encoding as well, which may actually bloat the binary due to the sentinel name appearing repeatedly.
+If the encodings are mixed, but must appear in separate sections, then when round-tripping through the binary format, either it will be impossible to preserve the order of imports (without additional ordering information, which would be superfluous), or the round-trip will be lossy by forcing everything to use the compact encoding. (That said, text tooling may wish to use the compact encoding for everything anyway, as it should be the better choice in the vast majority of cases.)
