@@ -13590,6 +13590,12 @@ $$
 {(\mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{import}’}~~{\mathit{nm}}_1{:}{\mathtt{name}}~~{\mathit{nm}}_2{:}{\mathtt{name}}~~{{\mathtt{externtype}}}_{I}~~\mbox{‘\texttt{{)}}’})^\ast} \\
 \end{array}
 } \\
+& & | & \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{import}’}~~{\mathit{nm}}_1{:}{\mathtt{name}}~~\mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{type}’}~~{{\mathtt{externtype}}}_{I}~~{(\mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{item}’}~~{{\mathit{id}}^?}{:}{{\mathtt{id}}^?}~~{\mathit{nm}}_2{:}{\mathtt{name}}~~\mbox{‘\texttt{{)}}’})^\ast}~~\mbox{‘\texttt{{)}}’}~~\mbox{‘\texttt{{)}}’} & \quad\equiv\quad{} & & \\
+&&& \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+{(\mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{import}’}~~{\mathit{nm}}_1{:}{\mathtt{name}}~~{\mathit{nm}}_2{:}{\mathtt{name}}~~{{\mathtt{externtype}}}_{I}~~\mbox{‘\texttt{{)}}’})^\ast} \\
+\end{array}
+} \\
 & {{\mathtt{import}}}_{I} & ::= & \dots \\
 & & | & \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{tag}’}~~{{\mathtt{id}}^?}~~\mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{import}’}~~{{\mathtt{name}}^{2}}~~\mbox{‘\texttt{{)}}’}~~{{\mathtt{tagtype}}}_{I}~~\mbox{‘\texttt{{)}}’} & \quad\equiv\quad{} & & \\
 &&& \multicolumn{4}{@{}l@{}}{\quad
