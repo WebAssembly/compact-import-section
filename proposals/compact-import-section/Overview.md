@@ -4,7 +4,7 @@
 
 The binary format for the import section today must redundantly specify both the module name and item name for each import. For example, a module that has 1000 imports from an "env" module will have 1000 copies of the "env" string in the binary. It is typical in practice for a WebAssembly module to have just a handful of unique module names, even when there are thousands of imports, so the redundant module names are almost always very wasteful.
 
-Additionally, some modules have runs of imports with the same type, e.g. many `(global (mut i32)`'s for WebGL, or many `(ref extern)` for [JS String Builtins](https://github.com/WebAssembly/js-string-builtins). In such cases, the type could be considered redundant as well, and could be encoded more compactly.
+Additionally, some modules have runs of imports with the same type, e.g. many `(global (mut i32))` for WebGL, or many `(ref extern)` for [JS String Builtins](https://github.com/WebAssembly/js-string-builtins). In such cases, the type could be considered redundant as well, and could be encoded more compactly.
 
 JS String Builtins are the most affected by these problems, as modules can have a very large number of imports to handle all the string constants needed in the module, but every import must spend at least five extra bytes to encode the module name and global type. This adds up quickly in practice.
 
@@ -48,6 +48,8 @@ Two new forms of the `import` declaration are added, in addition to the existing
 (import "mod" (item "foo" ...) (item "bar" ...))    ;; compact encoding 1 (new)
 (import "mod" (type ... (item "foo") (item "bar"))) ;; compact encoding 2 (new)
 ```
+
+The `(item)` syntax is used for encoding 2, rather than bare strings, in order to provide room for an identifier, e.g. `(import "mod" (type ... (item $foo "foo")))`.
 
 ### Syntax, Validation, Execution
 
