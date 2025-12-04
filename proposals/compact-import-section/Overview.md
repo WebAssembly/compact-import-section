@@ -2,17 +2,26 @@
 
 ## Problem
 
-The binary format for the import section today must redundantly specify both the module name and item name for each import. For example, a module that has 1000 imports from an "env" module will have 1000 copies of the "env" string in the binary.
+The binary format for the import section today must redundantly specify both the module name and item name for each import. For example, a module that has 1000 imports from an "env" module will have 1000 copies of the "env" string in the binary. It is typical in practice for a WebAssembly module to have just a handful of unique module names, even when there are thousands of imports, so the redundant module names are almost always very wasteful.
 
-This problem is exacerbated by [JS String Builtins](https://github.com/WebAssembly/js-string-builtins), as modules can have a very large number of imports to handle all the string constants needed in the module. This can be mitigated somewhat by network compression, but this cost must still be paid at parsing time after decompression.
+Additionally, some modules have runs of imports with the same type, e.g. many `(global (mut i32)`'s for WebGL, or many `(ref extern)` for [JS String Builtins](https://github.com/WebAssembly/js-string-builtins). In such cases, the type could be considered redundant as well, and could be encoded more compactly.
+
+JS String Builtins are the most affected by these problems, as modules can have a very large number of imports to handle all the string constants needed in the module, but every import must spend at least five extra bytes to encode the module name and global type. This adds up quickly in practice.
+
+The redundancy problem can be mitigated to a large degree by network compression, but this cost must still be paid at parsing time after decompression. Additionally, we have found through [testing](https://docs.google.com/spreadsheets/d/1QgA26STK3GRmV10uNqNLvWoHdWhA81sGSVwr0wF_540/edit?gid=0#gid=0) that the bloat does not disappear entirely under compression, and some modules are wasting a few KB even when compressed.
 
 ## Proposal
 
-This proposal aims to solve this problem through a small change to the binary format, encoding the module name only once, followed by a list of `(item name, externtype)` pairs. (Currently imports are encoded as `(module name, item name, externtype)` triples.)
+This proposal aims to solve this problem through a small change to the binary format, introducing two new compact encodings for imports. They are:
+
+- One module name and a list of (item name, externtype) pairs.
+- One module name, one externtype, and a list of item names.
+
+(Currently imports are always encoded as (module name, item name, externtype) triples.)
 
 ### Binary
 
-A compact group of imports with a common module name is encoded by: the module name, an empty name, the byte `0x7F` (in place of the externtype), and a [list](https://webassembly.github.io/spec/core/binary/conventions.html#binary-list) (vec) of import items. The previous encoding still produces a single import.
+Both compact encodings begin the same way: the module name, an empty name, and a byte to signify the compact encoding being used, either `0x7F` or `0x7E` (occurring in the same place as the current encoding's externtype). The required item names and externtypes are then encoded straightforwardly. The previous encoding remains valid and still encodes a single import.
 
 ```
 ;; Before
@@ -21,22 +30,23 @@ import    ::== nm1:name nm2:name externtype
 
 ;; After
 importsec ::== section_2(list(imports))
-imports   ::== nm1:name import                                     ;; single-item encoding (existing)
-             | nm1:name nm2:name 0x7F list(import)  -- if nm2 = "" ;; multiple-item compact encoding
-import    ::== nm2:name externtype
+imports   ::== nm1:name nm2:name externtype                                   ;; single-item encoding (existing)
+             | nm1:name nm:name 0x7F list(nm2:name externtype)  -- if nm = "" ;; compact encoding 1
+             | nm1:name nm:name 0x7E externtype list(nm2:name)  -- if nm = "" ;; compact encoding 2
 ```
 
-The `0x7F` will cause existing implementations to fail with "unknown import type" or similar, making this change backward-compatible. The value of `7F` is chosen so that this byte may be reinterpreted as LEB128 in the future.
+The `0x7F` or `0x7E` will cause existing implementations to fail with "unknown import type" or similar, making this change backward-compatible. The values are chosen so that this byte may be reinterpreted as LEB128 in the future.
 
-The expected overall cost of this encoding is just three or four bytes: `0x00` for the empty name, `0x7F` to signal the compact encoding, and likely no more than two bytes for the number of import items to follow. As any redundant module name must be at least one byte (for a zero-length name), this encoding should easily pay for itself.
+The expected overall cost of this encoding scheme is just three or four bytes: `0x00` for the empty name, `0x7F` or `0x7E` to signal a compact encoding, and likely no more than two bytes for the number of import items to follow. As any redundant module name or externtype must be at least one byte, this encoding should easily pay for itself in almost all situations.
 
 ### Text format
 
-A new form of the `import` declaration is added that produces a list of imports, and implicitly maps to the compact encoding. The existing syntax remains valid and maps to the non-compact encoding.
+Two new forms of the `import` declaration are added, in addition to the existing one:
 
 ```
-(import "mod" (item "foo" ...) (item "bar" ...)) ;; new; maps to compact encoding
-(import "mod" "foo" ...)                         ;; existing; maps to non-compact encoding
+(import "mod" "foo" ...)                            ;; existing
+(import "mod" (item "foo" ...) (item "bar" ...))    ;; compact encoding 1 (new)
+(import "mod" (type ... (item "foo") (item "bar"))) ;; compact encoding 2 (new)
 ```
 
 ### Syntax, Validation, Execution
@@ -48,7 +58,7 @@ No changes are made to the syntax, validation, or execution sections.
 
 ### Update the AST of modules
 
-It would be possible to manifest this change in the structure of a WebAssembly module like so:
+It would be possible to manifest these changes in the structure of a WebAssembly module like so:
 
 ```
 ;; Before
