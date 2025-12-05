@@ -545,7 +545,7 @@ warning: grammar `Bglobalsec` was never spliced
 warning: grammar `Bglobaltype` was never spliced
 warning: grammar `Bheaptype` was never spliced
 warning: grammar `BiN` was never spliced
-warning: grammar `Bimport` was never spliced
+warning: grammar `Bimportitem` was never spliced
 warning: grammar `Bimports` was never spliced
 warning: grammar `Bimportsec` was never spliced
 warning: grammar `Binstr/parametric` was never spliced
@@ -769,7 +769,8 @@ warning: grammar `Timport_/abbrev-mem` was never spliced
 warning: grammar `Timport_/abbrev-table` was never spliced
 warning: grammar `Timport_/abbrev-func` was never spliced
 warning: grammar `Timportdots` was never spliced
-warning: grammar `Timports_/abbrev` was never spliced
+warning: grammar `Timports_/abbrev-compact1` was never spliced
+warning: grammar `Timports_/abbrev-compact2` was never spliced
 warning: grammar `Tinstr_` was never spliced
 warning: grammar `Tinstrs_/unfolded` was never spliced
 warning: grammar `Tinstrs_/folded` was never spliced

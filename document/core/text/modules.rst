@@ -359,7 +359,11 @@ Abbreviations
 
 Multiple imports with the same ${:nm_1} may be declared together:
 
-$${grammar: Timports_/abbrev}
+$${grammar: Timports_/abbrev-compact1}
+
+Multiple imports with the same ${:nm_1} and ${:xt} may also be declared together, in which case identifiers may be placed on individual items instead of the ${:externtype}:
+
+$${grammar: Timports_/abbrev-compact2}
 
 Imports may also be specified inline with
 :ref:`tag <text-tag>`,
