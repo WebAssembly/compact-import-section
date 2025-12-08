@@ -138,7 +138,7 @@ $${grammar: {Btypesec Btype}}
 .. index:: ! import section, import, name, function type, table type, memory type, global type, tag type
    pair: binary format; import
    pair: section; import
-.. _binary-import:
+.. _binary-importitem:
 .. _binary-imports:
 .. _binary-importdesc:
 .. _binary-importsec:
@@ -149,10 +149,10 @@ Import Section
 The *import section* has the id 2.
 It decodes into the list of :ref:`imports <syntax-import>` of a :ref:`module <syntax-module>`.
 
-$${grammar: {Bimportsec Bimports Bimport}}
+$${grammar: {Bimportsec Bimports Bimportitem}}
 
 .. note::
-   The encoding of :ref:`imports <binary-imports>` containing ${:0x7F} allows multiple imports to be encoded without repeating the module name. Because ${:0x7F} is not a valid encoding for an :ref:`external type <binary-externtype>`, the encoding is unambiguous.
+   The encodings of :ref:`imports <binary-imports>` containing ${:0x7F} and ${:0x7E} allow multiple imports to be encoded without repeating the module name, and potentially also without repeating the externtype. Because ${:0x7F} and ${:0x7E} are not valid encodings for an :ref:`external type <binary-externtype>`, the encoding is unambiguous.
 
 
 .. index:: ! function section, function, type index, function type
