@@ -357,11 +357,11 @@ $${grammar: Timport_/plain}
 Abbreviations
 .............
 
-Multiple imports with the same ${:nm_1} may be declared together:
+Multiple imports with the same :ref:`name <syntax-name>` ${:nm_1} may be declared together:
 
 $${grammar: Timports_/abbrev-compact1}
 
-Multiple imports with the same ${:nm_1} and ${:xt} may also be declared together, in which case identifiers may be placed on individual items instead of the ${:externtype}:
+Multiple imports with the same :ref:`name <syntax-name>` ${:nm_1} and :ref:`external type <syntax-externtype>` may also be declared together:
 
 $${grammar: Timports_/abbrev-compact2}
 
