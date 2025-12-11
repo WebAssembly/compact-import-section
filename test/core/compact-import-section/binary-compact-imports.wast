@@ -72,6 +72,7 @@
     "\01b" "\00\00"           ;;       "b" (func (type 0))
     "\01c" "\00\00"           ;;       "c" (func (type 0))
   )
+  "malformed import kind"
 )
 (assert_malformed
   (module binary
@@ -86,6 +87,7 @@
     "\01b"                    ;;       "b"
     "\01c"                    ;;       "c"
   )
+  "malformed import kind"
 )
 
 ;; Empty names are still valid if not followed by a discriminator
