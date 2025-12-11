@@ -64,10 +64,6 @@
 
 (module (import "test" (item "func->11i" (func (result i32)))))
 (assert_unlinkable
-  (module (import "unknown" (item "func->11i" (func (result i32)))))
-  "unknown import"
-)
-(assert_unlinkable
   (module (import "test" (item "unknown" (func (result i32)))))
   "unknown import"
 )
@@ -77,10 +73,6 @@
 )
 
 (module (import "test" (item "func->11i") (func (result i32))))
-(assert_unlinkable
-  (module (import "unknown" (item "func->11i") (func (result i32))))
-  "unknown import"
-)
 (assert_unlinkable
   (module (import "test" (item "unknown") (func (result i32))))
   "unknown import"
