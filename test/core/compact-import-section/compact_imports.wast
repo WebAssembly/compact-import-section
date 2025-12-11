@@ -21,4 +21,4 @@
   )
 )
 
-(assert_return (invoke "sum" (i32.const 33)))
+(assert_return (invoke "sum") (i32.const 33))
