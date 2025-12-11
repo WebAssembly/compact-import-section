@@ -12,7 +12,7 @@
 ;; Valid compact encodings
 (module binary
   "\00asm" "\01\00\00\00"
-  "\01\04\01\60\00\00"        ;; Type section: (type (func))
+  "\01\04\01\60\00\01\7f"     ;; Type section: (type (func (result i32)))
   "\02\0e"                    ;; Import section
   "\01"                       ;;   1 group
   "\01a"                      ;;     "a"
@@ -23,7 +23,7 @@
 )
 (module binary
   "\00asm" "\01\00\00\00"
-  "\01\04\01\60\00\00"        ;; Type section: (type (func))
+  "\01\04\01\60\00\01\7f"     ;; Type section: (type (func (result i32)))
   "\02\11"                    ;; Import section
   "\01"                       ;;   1 group
   "\01a"                      ;;     "a"
@@ -37,7 +37,7 @@
 ;; Overly-long empty name encodings are valid
 (module binary
   "\00asm" "\01\00\00\00"
-  "\01\04\01\60\00\00"        ;; Type section: (type (func))
+  "\01\04\01\60\00\01\7f"     ;; Type section: (type (func (result i32)))
   "\02\11"                    ;; Import section
   "\01"                       ;;   1 group
   "\01a"                      ;;     "a"
@@ -48,7 +48,7 @@
 )
 (module binary
   "\00asm" "\01\00\00\00"
-  "\01\04\01\60\00\00"        ;; Type section: (type (func))
+  "\01\04\01\60\00\01\7f"     ;; Type section: (type (func (result i32)))
   "\02\0f"                    ;; Import section
   "\01"                       ;;   1 group
   "\01a"                      ;;     "a"
@@ -63,7 +63,7 @@
 (assert_malformed
   (module binary
     "\00asm" "\01\00\00\00"
-    "\01\04\01\60\00\00"      ;; Type section: (type (func))
+  "\01\04\01\60\00\01\7f"     ;; Type section: (type (func (result i32)))
     "\02\12"                  ;; Import section
     "\01"                     ;;   1 group
     "\01a"                    ;;     "a"
@@ -77,7 +77,7 @@
 (assert_malformed
   (module binary
     "\00asm" "\01\00\00\00"
-    "\01\04\01\60\00\00"      ;; Type section: (type (func))
+    "\01\04\01\60\00\01\7f"   ;; Type section: (type (func (result i32)))
     "\02\10"                  ;; Import section
     "\01"                     ;;   1 group
     "\01a"                    ;;     "a"
@@ -94,7 +94,7 @@
 (assert_malformed
   (module binary
     "\00asm" "\01\00\00\00"
-    "\01\04\01\60\00\00"      ;; Type section: (type (func))
+    "\01\04\01\60\00\01\7f"   ;; Type section: (type (func (result i32)))
     "\02\11"                  ;; Import section
     "\01"                     ;;   1 group
     "\01a"                    ;;     "a"
@@ -108,7 +108,7 @@
 (assert_malformed
   (module binary
     "\00asm" "\01\00\00\00"
-    "\01\04\01\60\00\00"      ;; Type section: (type (func))
+    "\01\04\01\60\00\01\7f"   ;; Type section: (type (func (result i32)))
     "\02\0f"                  ;; Import section
     "\01"                     ;;   1 group
     "\01a"                    ;;     "a"
@@ -124,7 +124,7 @@
 ;; Empty names are still valid if not followed by a discriminator
 (module binary
   "\00asm" "\01\00\00\00"
-  "\01\04\01\60\00\00"        ;; Type section: (type (func))
+  "\01\04\01\60\00\01\7f"     ;; Type section: (type (func (result i32)))
   "\02\05"                    ;; Import section
   "\01"                       ;;   1 group
   "\00\00\00\00"              ;;     "" "" (func (type 0))
