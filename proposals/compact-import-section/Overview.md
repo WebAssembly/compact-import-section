@@ -46,10 +46,8 @@ Two new forms of the `import` declaration are added, in addition to the existing
 ```
 (import "mod" "foo" ...)                            ;; existing
 (import "mod" (item "foo" ...) (item "bar" ...))    ;; compact encoding 1 (new)
-(import "mod" (type ... (item "foo") (item "bar"))) ;; compact encoding 2 (new)
+(import "mod" (item "foo") (item "bar") ...)        ;; compact encoding 2 (new)
 ```
-
-The `(item)` syntax is used for encoding 2, rather than bare strings, in order to provide room for an identifier, e.g. `(import "mod" (type ... (item $foo "foo")))`.
 
 ### Syntax, Validation, Execution
 
