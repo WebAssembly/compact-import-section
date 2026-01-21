@@ -16,13 +16,16 @@
 (module binary
   "\00asm" "\01\00\00\00"
   "\01\05\01\60\00\01\7f"     ;; Type section: (type (func (result i32)))
-  "\02\0e"                    ;; Import section
-  "\01"                       ;;   1 group
+  "\02\13"                    ;; Import section
+  "\02"                       ;;   2 groups
+  "\01x"                      ;;     "x"
+  "\00" "\7f"                 ;;       "" + 0x7f (compact encoding 1)
+  "\00"                       ;;       0 items
   "\01a"                      ;;     "a"
-  "\00" "\7f"                 ;;     "" + 0x7f (compact encoding)
-  "\02"                       ;;     2 items
-  "\01b" "\00\00"             ;;       "b" (func (type 0))
-  "\01c" "\00\00"             ;;       "c" (func (type 0))
+  "\00" "\7f"                 ;;       "" + 0x7f (compact encoding 1)
+  "\02"                       ;;       2 items
+  "\01b" "\00\00"             ;;         "b" (func (type 0))
+  "\01c" "\00\00"             ;;         "c" (func (type 0))
   "\03\02" "\01"              ;; Function section, 1 func
   "\00"                       ;;   func 2: type 0
   "\07\08" "\01"              ;; Export section, 1 export
@@ -39,14 +42,18 @@
 (module binary
   "\00asm" "\01\00\00\00"
   "\01\05\01\60\00\01\7f"     ;; Type section: (type (func (result i32)))
-  "\02\0c"                    ;; Import section
-  "\01"                       ;;   1 group
+  "\02\13"                    ;; Import section
+  "\01"                       ;;   2 groups
+  "\01x"                      ;;     "x"
+  "\00" "\7e"                 ;;       "" + 0x7e (compact encoding 2)
+  "\00\00"                    ;;       (func (type 0))
+  "\00"                       ;;       0 items
   "\01a"                      ;;     "a"
-  "\00" "\7e"                 ;;     "" + 0x7e (compact encoding)
-  "\00\00"                    ;;     (func (type 0))
-  "\02"                       ;;     2 items
-  "\01b"                      ;;       "b"
-  "\01c"                      ;;       "c"
+  "\00" "\7e"                 ;;       "" + 0x7e (compact encoding 2)
+  "\00\00"                    ;;       (func (type 0))
+  "\02"                       ;;       2 items
+  "\01b"                      ;;         "b"
+  "\01c"                      ;;         "c"
   "\03\02" "\01"              ;; Function section, 1 func
   "\00"                       ;;   func 2: type 0
   "\07\08" "\01"              ;; Export section, 1 export

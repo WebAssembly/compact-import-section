@@ -14,6 +14,10 @@
 ;; Basic behavior
 
 (module
+  ;; Empty groups which should not affect anything
+  (import "test")
+  (import "test" (global i32))
+
   (import "test"
     (item "func->11i" (func (result i32)))
     (item "func->22f" (func (result f32)))
