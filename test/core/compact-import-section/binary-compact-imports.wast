@@ -43,7 +43,7 @@
   "\00asm" "\01\00\00\00"
   "\01\05\01\60\00\01\7f"     ;; Type section: (type (func (result i32)))
   "\02\13"                    ;; Import section
-  "\01"                       ;;   2 groups
+  "\02"                       ;;   2 groups
   "\01x"                      ;;     "x"
   "\00" "\7e"                 ;;       "" + 0x7e (compact encoding 2)
   "\00\00"                    ;;       (func (type 0))
