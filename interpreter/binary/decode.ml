@@ -1028,14 +1028,37 @@ let type_section s =
 
 (* Import section *)
 
-let import s =
+let imports s =
+  let left = pos s in
   let module_name = name s in
   let item_name = name s in
-  let xt = externtype s in
-  Import (module_name, item_name, xt)
+  if item_name = [] then
+    match peek s with
+    | Some 0x7f ->
+      skip 1 s;
+      vec (fun s ->
+        let l = pos s in
+        let nm = name s in
+        let xt = externtype s in
+        Import (module_name, nm, xt) @@ region s l (pos s)
+      ) s
+    | Some 0x7e ->
+      skip 1 s;
+      let xt = externtype s in
+      vec (fun s ->
+        let l = pos s in
+        let nm = name s in
+        Import (module_name, nm, xt) @@ region s l (pos s)
+      ) s
+    | _ ->
+      let xt = externtype s in
+      [Import (module_name, item_name, xt) @@ region s left (pos s)]
+  else
+    let xt = externtype s in
+    [Import (module_name, item_name, xt) @@ region s left (pos s)]
 
 let import_section s =
-  section Custom.Import (vec (at import)) [] s
+  section Custom.Import (fun s -> List.concat (vec imports s)) [] s
 
 
 (* Function section *)
