@@ -1,7 +1,7 @@
 # Preview
 
 ```sh
-$ ../src/exe-spectec/main.exe ../../../_specification/wasm-3.0/*.spectec -v -l --interpreter ../test-interpreter/sample.wat addTwo 30 12 2>&1
+$ ../src/exe-spectec/main.exe ../../../_specification/wasm-latest/*.spectec -v -l --interpreter ../test-interpreter/sample.wat addTwo 30 12 2>&1
 spectec 0.5 generator
 == Parsing...
 == Elaboration...
@@ -13,7 +13,7 @@ spectec 0.5 generator
 == Interpreting...
 42
 == Complete.
-$ ../src/exe-spectec/main.exe ../../../_specification/wasm-3.0/*.spectec -v -l --interpreter ../test-interpreter/sample.wasm addTwo 40 2 2>&1
+$ ../src/exe-spectec/main.exe ../../../_specification/wasm-latest/*.spectec -v -l --interpreter ../test-interpreter/sample.wasm addTwo 40 2 2>&1
 spectec 0.5 generator
 == Parsing...
 == Elaboration...
@@ -25,7 +25,7 @@ spectec 0.5 generator
 == Interpreting...
 42
 == Complete.
-$ ../src/exe-spectec/main.exe ../../../_specification/wasm-3.0/*.spectec -v -l --interpreter ../test-interpreter/sample.wast 2>&1
+$ ../src/exe-spectec/main.exe ../../../_specification/wasm-latest/*.spectec -v -l --interpreter ../test-interpreter/sample.wast 2>&1
 spectec 0.5 generator
 == Parsing...
 == Elaboration...
@@ -115,6 +115,21 @@ spectec 0.5 generator
 == Translating to AL...
 == Initializing interpreter...
 == Interpreting...
+- Test failed at ../test-interpreter/spec-test-3/compact-import-section/binary-compact-imports.wast:16.1-39.2 (Error(_, "malformed import kind"))
+Raised at Reference_interpreter__Decode.error in file "src/backend-interpreter/reference-interpreter/binary/decode.ml", line 41, characters 22-58
+Called from Reference_interpreter__Decode.import in file "src/backend-interpreter/reference-interpreter/binary/decode.ml", line 1034, characters 11-23
+Called from Reference_interpreter__Decode.at in file "src/backend-interpreter/reference-interpreter/binary/decode.ml", line 58, characters 10-13
+Called from Reference_interpreter__Decode.list in file "src/backend-interpreter/reference-interpreter/binary/decode.ml", line 121, characters 51-54
+Called from Reference_interpreter__Decode.sized in file "src/backend-interpreter/reference-interpreter/binary/decode.ml", line 141, characters 10-18
+Called from Reference_interpreter__Decode.module_ in file "src/backend-interpreter/reference-interpreter/binary/decode.ml", line 1270, characters 16-32
+Called from Reference_interpreter__Decode.at in file "src/backend-interpreter/reference-interpreter/binary/decode.ml", line 58, characters 10-13
+Called from Reference_interpreter__Decode.decode_with_custom in file "src/backend-interpreter/reference-interpreter/binary/decode.ml", line 1332, characters 13-40
+Called from Reference_interpreter__Decode.decode in file "src/backend-interpreter/reference-interpreter/binary/decode.ml", line 1338, characters 25-53
+Called from Backend_interpreter__Runner.run_command' in file "src/backend-interpreter/runner.ml", lines 218-219, characters 4-20
+Called from Backend_interpreter__Runner.run_command in file "src/backend-interpreter/runner.ml", line 241, characters 6-26
+Test failed for ../test-interpreter/spec-test-3/compact-import-section/binary-compact-imports.wast
+- Failed to parse ../test-interpreter/spec-test-3/compact-import-section/imports-compact.wast
+
 - print_i32: 83
 - print_i32: 13
 - print_i32_f32: 14 42
@@ -134,5 +149,6 @@ spectec 0.5 generator
 - print_i32: 1
 - print_i32: 2
 - print: ()
+1 parsing fail
 == Complete.
 ```

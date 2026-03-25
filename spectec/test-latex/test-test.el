@@ -15,7 +15,6 @@ syntax InfixArrow2 = | nat* =>_ {(nat*) nat*}
 syntax AtomArrow = {nat? ->_ (nat*) nat*}
 syntax AtomArrow2 = {nat? =>_ (nat*) nat*}
 def $InfixArrow(InfixArrow : InfixArrow) : nat
-def $InfixArrow(a ->_ c) = 0
 def $InfixArrow(a ->_ {c b}) = 0
 def $InfixArrow(a ->_ {(c*) b}) = 0
 def $InfixArrow(a ->_ {c b_1 b_2}) = 0
@@ -23,7 +22,6 @@ def $InfixArrow(a ->_ {(c*) b_1 b_2}) = 0
 def $InfixArrow(a ->_ {({c_1 c_2}) b_1 b_2}) = 0
 def $InfixArrow({} ->_ {({c_1 c_2}) b_1 b_2}) = 0
 def $InfixArrow2(InfixArrow2 : InfixArrow2) : nat
-def $InfixArrow2(a =>_ c) = 0
 def $InfixArrow2(a =>_ {c b}) = 0
 def $InfixArrow2(a =>_ {(c*) b}) = 0
 def $InfixArrow2(a =>_ {c b_1 b_2}) = 0
@@ -31,7 +29,6 @@ def $InfixArrow2(a =>_ {(c*) b_1 b_2}) = 0
 def $InfixArrow2(a =>_ {({c_1 c_2}) b_1 b_2}) = 0
 def $InfixArrow2({} =>_ {({c_1 c_2}) b_1 b_2}) = 0
 def $AtomArrow(AtomArrow : AtomArrow) : nat
-def $AtomArrow({a ->_ c}) = 0
 def $AtomArrow({a ->_ c b}) = 0
 def $AtomArrow({a ->_ (c*) b}) = 0
 def $AtomArrow({a ->_ c b_1 b_2}) = 0
@@ -39,17 +36,15 @@ def $AtomArrow({a ->_ (c*) b_1 b_2}) = 0
 def $AtomArrow({a ->_ ({c_1 c_2}) b_1 b_2}) = 0
 def $AtomArrow({->_ ({c_1 c_2}) b_1 b_2}) = 0
 def $AtomArrow2(AtomArrow2 : AtomArrow2) : nat
-def $AtomArrow2({a =>_ c}) = 0
 def $AtomArrow2({a =>_ c b}) = 0
 def $AtomArrow2({a =>_ (c*) b}) = 0
 def $AtomArrow2({a =>_ c b_1 b_2}) = 0
 def $AtomArrow2({a =>_ (c*) b_1 b_2}) = 0
 def $AtomArrow2({a =>_ ({c_1 c_2}) b_1 b_2}) = 0
 def $AtomArrow2({=>_ ({c_1 c_2}) b_1 b_2}) = 0
-syntax MacroInfixArrow = | nat* ->_ {nat* nat*}
-syntax MacroAtomArrow = | nat* ->_ {nat* nat*}
+syntax MacroInfixArrow = | nat* ->_ {(nat*) nat*}
+syntax MacroAtomArrow = | nat* ->_ {(nat*) nat*}
 def $MacroInfixArrow(MacroInfixArrow : MacroInfixArrow) : nat
-def $MacroInfixArrow(a ->_ c) = 0
 def $MacroInfixArrow(a ->_ {c b}) = 0
 def $MacroInfixArrow(a ->_ {(c*) b}) = 0
 def $MacroInfixArrow(a ->_ {c b_1 b_2}) = 0
@@ -57,17 +52,15 @@ def $MacroInfixArrow(a ->_ {(c*) b_1 b_2}) = 0
 def $MacroInfixArrow(a ->_ {({c_1 c_2}) b_1 b_2}) = 0
 def $MacroInfixArrow({} ->_ {({c_1 c_2}) b_1 b_2}) = 0
 def $MacroAtomArrow(MacroAtomArrow : MacroAtomArrow) : nat
-def $MacroAtomArrow(a ->_ c) = 0
 def $MacroAtomArrow(a ->_ {c b}) = 0
 def $MacroAtomArrow(a ->_ {(c*) b}) = 0
 def $MacroAtomArrow(a ->_ {c b_1 b_2}) = 0
 def $MacroAtomArrow(a ->_ {(c*) b_1 b_2}) = 0
 def $MacroAtomArrow(a ->_ {({c_1 c_2}) b_1 b_2}) = 0
 def $MacroAtomArrow({} ->_ {({c_1 c_2}) b_1 b_2}) = 0
-syntax ShowInfixArrow = | nat* ->_ {nat* nat*}
-syntax ShowAtomArrow = | nat* ->_ {nat* nat*}
+syntax ShowInfixArrow = | nat* ->_ {(nat*) nat*}
+syntax ShowAtomArrow = | nat* ->_ {(nat*) nat*}
 def $ShowInfixArrow(ShowInfixArrow : ShowInfixArrow) : nat
-def $ShowInfixArrow(a ->_ c) = 0
 def $ShowInfixArrow(a ->_ {c b}) = 0
 def $ShowInfixArrow(a ->_ {(c*) b}) = 0
 def $ShowInfixArrow(a ->_ {c b_1 b_2}) = 0
@@ -75,17 +68,15 @@ def $ShowInfixArrow(a ->_ {(c*) b_1 b_2}) = 0
 def $ShowInfixArrow(a ->_ {({c_1 c_2}) b_1 b_2}) = 0
 def $ShowInfixArrow({} ->_ {({c_1 c_2}) b_1 b_2}) = 0
 def $ShowAtomArrow(ShowAtomArrow : ShowAtomArrow) : nat
-def $ShowAtomArrow(a ->_ c) = 0
 def $ShowAtomArrow(a ->_ {c b}) = 0
 def $ShowAtomArrow(a ->_ {(c*) b}) = 0
 def $ShowAtomArrow(a ->_ {c b_1 b_2}) = 0
 def $ShowAtomArrow(a ->_ {(c*) b_1 b_2}) = 0
 def $ShowAtomArrow(a ->_ {({c_1 c_2}) b_1 b_2}) = 0
 def $ShowAtomArrow({} ->_ {({c_1 c_2}) b_1 b_2}) = 0
-syntax ShowMacroInfixArrow = | nat* ->_ {nat* nat*}
-syntax ShowMacroAtomArrow = | nat* ->_ {nat* nat*}
+syntax ShowMacroInfixArrow = | nat* ->_ {(nat*) nat*}
+syntax ShowMacroAtomArrow = | nat* ->_ {(nat*) nat*}
 def $ShowMacroInfixArrow(ShowMacroInfixArrow : ShowMacroInfixArrow) : nat
-def $ShowMacroInfixArrow(a ->_ c) = 0
 def $ShowMacroInfixArrow(a ->_ {c b}) = 0
 def $ShowMacroInfixArrow(a ->_ {(c*) b}) = 0
 def $ShowMacroInfixArrow(a ->_ {c b_1 b_2}) = 0
@@ -93,7 +84,6 @@ def $ShowMacroInfixArrow(a ->_ {(c*) b_1 b_2}) = 0
 def $ShowMacroInfixArrow(a ->_ {({c_1 c_2}) b_1 b_2}) = 0
 def $ShowMacroInfixArrow({} ->_ {({c_1 c_2}) b_1 b_2}) = 0
 def $ShowMacroAtomArrow(ShowMacroAtomArrow : ShowMacroAtomArrow) : nat
-def $ShowMacroAtomArrow(a ->_ c) = 0
 def $ShowMacroAtomArrow(a ->_ {c b}) = 0
 def $ShowMacroAtomArrow(a ->_ {(c*) b}) = 0
 def $ShowMacroAtomArrow(a ->_ {c b_1 b_2}) = 0

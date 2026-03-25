@@ -100,7 +100,7 @@ grammar Bstartsec : start? hint(desc "start section") =
 ;; Element section
 
 grammar Belemkind : reftype hint(desc "element kind") =
-  | 0x00 => REF NULL FUNC
+  | 0x00 => REF FUNC
 
 grammar Belem : elem =
   | 0:Bu32 e_o:Bexpr y*:Blist(Bfuncidx) =>
@@ -115,8 +115,8 @@ grammar Belem : elem =
       ELEM (REF NULL FUNC) e* (ACTIVE 0 e_O)
   | 5:Bu32 rt:Breftype e*:Blist(Bexpr) =>
       ELEM rt e* PASSIVE
-  | 6:Bu32 x:Btableidx e_O:Bexpr e*:Blist(Bexpr) =>
-      ELEM (REF NULL FUNC) e* (ACTIVE x e_O)
+  | 6:Bu32 x:Btableidx e_O:Bexpr rt:Breftype e*:Blist(Bexpr) =>
+      ELEM rt e* (ACTIVE x e_O)
   | 7:Bu32 rt:Breftype e*:Blist(Bexpr) =>
       ELEM rt e* DECLARE
 
