@@ -1227,32 +1227,67 @@ table_fields :
 /* Imports & Exports */
 
 externtype :
-  | LPAR FUNC bindidx_opt typeuse RPAR
-    { fun c -> ignore ($3 c anon_func bind_func);
-      fun () -> ExternFuncT (Idx ($4 c).it) }
-  | LPAR TAG bindidx_opt typeuse RPAR
-    { fun c -> ignore ($3 c anon_tag bind_tag);
-      fun () -> ExternTagT (TagT (Idx ($4 c).it)) }
-  | LPAR TAG bindidx_opt functype RPAR  /* Sugar */
-    { fun c -> ignore ($3 c anon_tag bind_tag);
-      fun () -> ExternTagT (TagT (Idx (inline_functype c ($4 c) $loc($4)).it)) }
-  | LPAR GLOBAL bindidx_opt globaltype RPAR
-    { fun c -> ignore ($3 c anon_global bind_global);
-      fun () -> ExternGlobalT ($4 c) }
-  | LPAR MEMORY bindidx_opt memorytype RPAR
-    { fun c -> ignore ($3 c anon_memory bind_memory);
-      fun () -> ExternMemoryT ($4 c) }
-  | LPAR TABLE bindidx_opt tabletype RPAR
-    { fun c -> ignore ($3 c anon_table bind_table);
-      fun () -> ExternTableT ($4 c) }
-  | LPAR FUNC bindidx_opt functype RPAR  /* Sugar */
-    { fun c -> ignore ($3 c anon_func bind_func);
-      fun () -> ExternFuncT (Idx (inline_functype c ($4 c) $loc($4)).it) }
+  | LPAR FUNC option(bindidx) typeuse RPAR
+    { fun c -> ($3, anon_func, bind_func,
+      fun () -> ExternFuncT (Idx ($4 c).it)) }
+  | LPAR TAG option(bindidx) typeuse RPAR
+    { fun c -> ($3, anon_tag, bind_tag,
+      fun () -> ExternTagT (TagT (Idx ($4 c).it))) }
+  | LPAR TAG option(bindidx) functype RPAR  /* Sugar */
+    { fun c -> ($3, anon_tag, bind_tag,
+      fun () -> ExternTagT (TagT (Idx (inline_functype c ($4 c) $loc($4)).it))) }
+  | LPAR GLOBAL option(bindidx) globaltype RPAR
+    { fun c -> ($3, anon_global, bind_global,
+      fun () -> ExternGlobalT ($4 c)) }
+  | LPAR MEMORY option(bindidx) memorytype RPAR
+    { fun c -> ($3, anon_memory, bind_memory,
+      fun () -> ExternMemoryT ($4 c)) }
+  | LPAR TABLE option(bindidx) tabletype RPAR
+    { fun c -> ($3, anon_table, bind_table,
+      fun () -> ExternTableT ($4 c)) }
+  | LPAR FUNC option(bindidx) functype RPAR  /* Sugar */
+    { fun c -> ($3, anon_func, bind_func,
+      fun () -> ExternFuncT (Idx (inline_functype c ($4 c) $loc($4)).it)) }
+
+compact_item1 :
+  | LPAR ITEM name externtype RPAR
+    { fun c -> let (id, anon, bind, df) = $4 c in
+      ignore (match id with None -> anon c $loc($4) | Some x -> bind c x);
+      fun () -> ($3, df ()) }
+
+compact_item1_list :
+  | compact_item1
+    { fun c -> let f = $1 c in
+      fun () -> [f ()] }
+  | compact_item1 compact_item1_list
+    { fun c -> let f = $1 c in let fs = $2 c in
+      fun () -> f () :: fs () }
+
+compact_item2_list :
+  | LPAR ITEM name RPAR compact_item2_list
+    { let (items, xt_fn) = $5 in ($3 :: items, xt_fn) }
+  | externtype
+    { ([], $1) }
 
 import :
   | LPAR IMPORT name name externtype RPAR
-    { fun c -> let df = $5 c in
-      fun () -> Import ($3, $4, df ()) @@ $sloc }
+    { fun c -> let (id, anon, bind, df) = $5 c in
+      ignore (match id with None -> anon c $loc($5) | Some x -> bind c x);
+      fun () -> [Import ($3, $4, df ()) @@ $sloc] }
+  | LPAR IMPORT name compact_item1_list RPAR
+    { fun c -> let items = $4 c in
+      fun () ->
+        List.map (fun (item_name, xt) -> Import ($3, item_name, xt) @@ $sloc)
+          (items ()) }
+  | LPAR IMPORT name compact_item2_list RPAR
+    { fun c ->
+      let (items, xt_fn) = $4 in
+      let (id, anon, _bind, df) = xt_fn c in
+      (match id with Some x -> error x.at "identifier not allowed" | None -> ());
+      List.iter (fun _ -> ignore (anon c $sloc)) items;
+      fun () ->
+        let xt = df () in
+        List.map (fun item_name -> Import ($3, item_name, xt) @@ $sloc) items }
 
 inline_import :
   | LPAR IMPORT name name RPAR { $3, $4 }
@@ -1377,8 +1412,8 @@ module_fields1 :
   | import module_fields
     { fun c -> let imf = $1 c in let mff = $2 c in
       fun () -> let mf = mff () in
-      fun () -> let im = imf () in let m = mf () in
-      {m with imports = im :: m.imports} }
+      fun () -> let ims = imf () in let m = mf () in
+      {m with imports = ims @ m.imports} }
   | export module_fields
     { fun c -> let mff = $2 c in
       fun () -> let mf = mff () in
