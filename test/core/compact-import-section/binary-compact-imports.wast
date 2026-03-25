@@ -101,7 +101,7 @@
   (module binary
     "\00asm" "\01\00\00\00"
     "\01\05\01\60\00\01\7f"   ;; Type section: (type (func (result i32)))
-    "\02\12"                  ;; Import section
+    "\02\0f"                  ;; Import section
     "\01"                     ;;   1 group
     "\01a"                    ;;     "a"
     "\01b" "\7f"              ;;     "b" + 0x7f
@@ -115,10 +115,10 @@
   (module binary
     "\00asm" "\01\00\00\00"
     "\01\05\01\60\00\01\7f"   ;; Type section: (type (func (result i32)))
-    "\02\10"                  ;; Import section
+    "\02\0d"                  ;; Import section
     "\01"                     ;;   1 group
     "\01a"                    ;;     "a"
-    "\01b" "\7e"              ;;     "" + 0x7e (long encoding)
+    "\01b" "\7e"              ;;     "b" + 0x7e
     "\00\00"                  ;;     (func (type 0))
     "\02"                     ;;     2 items
     "\01b"                    ;;       "b"
