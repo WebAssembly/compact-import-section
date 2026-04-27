@@ -76,7 +76,7 @@
   "\02\11"                    ;; Import section
   "\01"                       ;;   1 group
   "\01a"                      ;;     "a"
-  "\80\80\80\00" "\7f"        ;;     "" (long encoding) + 0x7f
+  "\80\80\80\00" "\7f"        ;;     "" (overly long encoding) + 0x7f
   "\02"                       ;;     2 items
   "\01b" "\00\00"             ;;       "b" (func (type 0))
   "\01c" "\00\00"             ;;       "c" (func (type 0))
@@ -87,7 +87,7 @@
   "\02\0f"                    ;; Import section
   "\01"                       ;;   1 group
   "\01a"                      ;;     "a"
-  "\80\80\80\00" "\7e"        ;;     "" (long encoding) + 0x7e
+  "\80\80\80\00" "\7e"        ;;     "" (overly long encoding) + 0x7e
   "\00\00"                    ;;     (func (type 0))
   "\02"                       ;;     2 items
   "\01b"                      ;;       "b"
@@ -101,7 +101,7 @@
   (module binary
     "\00asm" "\01\00\00\00"
     "\01\05\01\60\00\01\7f"   ;; Type section: (type (func (result i32)))
-    "\02\12"                  ;; Import section
+    "\02\0f"                  ;; Import section
     "\01"                     ;;   1 group
     "\01a"                    ;;     "a"
     "\01b" "\7f"              ;;     "b" + 0x7f
@@ -115,10 +115,10 @@
   (module binary
     "\00asm" "\01\00\00\00"
     "\01\05\01\60\00\01\7f"   ;; Type section: (type (func (result i32)))
-    "\02\10"                  ;; Import section
+    "\02\0d"                  ;; Import section
     "\01"                     ;;   1 group
     "\01a"                    ;;     "a"
-    "\01b" "\7e"              ;;     "" + 0x7e (long encoding)
+    "\01b" "\7e"              ;;     "b" + 0x7e
     "\00\00"                  ;;     (func (type 0))
     "\02"                     ;;     2 items
     "\01b"                    ;;       "b"
@@ -137,7 +137,7 @@
     "\02\11"                  ;; Import section
     "\01"                     ;;   1 group
     "\01a"                    ;;     "a"
-    "\00\ff\80\80\00"         ;;     "" + 0x7f (long encoding)
+    "\00\ff\80\80\00"         ;;     "" + 0x7f (overly long encoding)
     "\02"                     ;;     2 items
     "\01b" "\00\00"           ;;       "b" (func (type 0))
     "\01c" "\00\00"           ;;       "c" (func (type 0))
@@ -151,7 +151,7 @@
     "\02\0f"                  ;; Import section
     "\01"                     ;;   1 group
     "\01a"                    ;;     "a"
-    "\00\fe\80\80\00"         ;;     "" + 0x7e (long encoding)
+    "\00\fe\80\80\00"         ;;     "" + 0x7e (overly long encoding)
     "\00\00"                  ;;     (func (type 0))
     "\02"                     ;;     2 items
     "\01b"                    ;;       "b"
