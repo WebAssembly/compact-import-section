@@ -179,3 +179,37 @@
   "\0b"                       ;;   end
 )
 (assert_return (invoke "test") (i32.const 0xab))
+
+
+;; Not enough imports in each group
+
+(assert_malformed
+  (module binary
+    "\00asm" "\01\00\00\00"
+    "\01\05\01\60\00\01\7f"   ;; Type section: (type (func (result i32)))
+    "\02\0a"                  ;; Import section
+    "\01"                     ;;   1 group
+    "\01a"                    ;;     "a"
+    "\00" "\7f"               ;;       "" + 0x7f
+    "\02"                     ;;       2 items
+    "\01b" "\00\00"           ;;         "b" (func (type 0))
+                              ;;         <-- second item missing
+  )
+  "unexpected end"
+)
+
+(assert_malformed
+  (module binary
+    "\00asm" "\01\00\00\00"
+    "\01\05\01\60\00\01\7f"   ;; Type section: (type (func (result i32)))
+    "\02\0a"                  ;; Import section
+    "\01"                     ;;   1 group
+    "\01a"                    ;;     "a"
+    "\00" "\7e"               ;;       "" + 0x7e
+    "\00\00"                  ;;       (func (type 0))
+    "\02"                     ;;       2 items
+    "\01b"                    ;;         "b"
+                              ;;         <-- second item missing
+  )
+  "unexpected end"
+)
