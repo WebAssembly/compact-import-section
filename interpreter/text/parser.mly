@@ -202,6 +202,9 @@ let bind_label (c : context) x = bind_rel "label" c.labels x
 let bind_field (c : context) x y =
   bind_abs "field" (Lib.List32.nth c.types.fields x) y
 
+let bind_if b f = if b then f else
+  fun _c x -> error x.at "identifier not allowed"
+
 let define_type (c : context) (ty : type_) =
   c.types.list <- c.types.list @ [ty]
 
@@ -1227,32 +1230,31 @@ table_fields :
 /* Imports & Exports */
 
 externtype :
-  | LPAR FUNC option(bindidx) typeuse RPAR
-    { fun c -> ($3, anon_func, bind_func,
-      fun () -> ExternFuncT (Idx ($4 c).it)) }
-  | LPAR TAG option(bindidx) typeuse RPAR
-    { fun c -> ($3, anon_tag, bind_tag,
-      fun () -> ExternTagT (TagT (Idx ($4 c).it))) }
-  | LPAR TAG option(bindidx) functype RPAR  /* Sugar */
-    { fun c -> ($3, anon_tag, bind_tag,
-      fun () -> ExternTagT (TagT (Idx (inline_functype c ($4 c) $loc($4)).it))) }
-  | LPAR GLOBAL option(bindidx) globaltype RPAR
-    { fun c -> ($3, anon_global, bind_global,
-      fun () -> ExternGlobalT ($4 c)) }
-  | LPAR MEMORY option(bindidx) memorytype RPAR
-    { fun c -> ($3, anon_memory, bind_memory,
-      fun () -> ExternMemoryT ($4 c)) }
-  | LPAR TABLE option(bindidx) tabletype RPAR
-    { fun c -> ($3, anon_table, bind_table,
-      fun () -> ExternTableT ($4 c)) }
-  | LPAR FUNC option(bindidx) functype RPAR  /* Sugar */
-    { fun c -> ($3, anon_func, bind_func,
-      fun () -> ExternFuncT (Idx (inline_functype c ($4 c) $loc($4)).it)) }
+  | LPAR FUNC bindidx_opt typeuse RPAR
+    { fun c b -> ignore ($3 c anon_func (bind_if b bind_func));
+      fun () -> ExternFuncT (Idx ($4 c).it) }
+  | LPAR TAG bindidx_opt typeuse RPAR
+    { fun c b -> ignore ($3 c anon_tag (bind_if b bind_tag));
+      fun () -> ExternTagT (TagT (Idx ($4 c).it)) }
+  | LPAR TAG bindidx_opt functype RPAR  /* Sugar */
+    { fun c b -> ignore ($3 c anon_tag (bind_if b bind_tag));
+      fun () -> ExternTagT (TagT (Idx (inline_functype c ($4 c) $loc($4)).it)) }
+  | LPAR GLOBAL bindidx_opt globaltype RPAR
+    { fun c b -> ignore ($3 c anon_global (bind_if b bind_global));
+      fun () -> ExternGlobalT ($4 c) }
+  | LPAR MEMORY bindidx_opt memorytype RPAR
+    { fun c b -> ignore ($3 c anon_memory (bind_if b bind_memory));
+      fun () -> ExternMemoryT ($4 c) }
+  | LPAR TABLE bindidx_opt tabletype RPAR
+    { fun c b -> ignore ($3 c anon_table (bind_if b bind_table));
+      fun () -> ExternTableT ($4 c) }
+  | LPAR FUNC bindidx_opt functype RPAR  /* Sugar */
+    { fun c b -> ignore ($3 c anon_func (bind_if b bind_func));
+      fun () -> ExternFuncT (Idx (inline_functype c ($4 c) $loc($4)).it) }
 
 compact_item1 :
   | LPAR ITEM name externtype RPAR
-    { fun c -> let (id, anon, bind, df) = $4 c in
-      ignore (match id with None -> anon c $loc($4) | Some x -> bind c x);
+    { fun c -> let df = $4 c true in
       fun () -> ($3, df ()) }
 
 compact_item1_list :
@@ -1265,14 +1267,13 @@ compact_item1_list :
 
 compact_item2_list :
   | LPAR ITEM name RPAR compact_item2_list
-    { let (items, xt_fn) = $5 in ($3 :: items, xt_fn) }
+    { let (item_names, xt_fn) = $5 in ($3 :: item_names, xt_fn) }
   | externtype
     { ([], $1) }
 
 import :
   | LPAR IMPORT name name externtype RPAR
-    { fun c -> let (id, anon, bind, df) = $5 c in
-      ignore (match id with None -> anon c $loc($5) | Some x -> bind c x);
+    { fun c -> let df = $5 c true in
       fun () -> [Import ($3, $4, df ()) @@ $sloc] }
   | LPAR IMPORT name compact_item1_list RPAR
     { fun c -> let items = $4 c in
@@ -1281,13 +1282,12 @@ import :
           (items ()) }
   | LPAR IMPORT name compact_item2_list RPAR
     { fun c ->
-      let (items, xt_fn) = $4 in
-      let (id, anon, _bind, df) = xt_fn c in
-      (match id with Some x -> error x.at "identifier not allowed" | None -> ());
-      List.iter (fun _ -> ignore (anon c $sloc)) items;
+      let (item_names, xt_fn) = $4 in
+      (* Apply the externtype once per item, to allocate one index each *)
+      let dfs = List.map (fun _ -> xt_fn c false) item_names in
       fun () ->
-        let xt = df () in
-        List.map (fun item_name -> Import ($3, item_name, xt) @@ $sloc) items }
+        List.map2 (fun item_name df -> Import ($3, item_name, df ()) @@ $sloc)
+          item_names dfs }
 
 inline_import :
   | LPAR IMPORT name name RPAR { $3, $4 }

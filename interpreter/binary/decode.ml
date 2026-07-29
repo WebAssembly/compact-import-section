@@ -1032,28 +1032,24 @@ let imports s =
   let left = pos s in
   let module_name = name s in
   let item_name = name s in
-  if item_name = [] then
-    match peek s with
-    | Some 0x7f ->
-      skip 1 s;
-      vec (fun s ->
-        let l = pos s in
-        let nm = name s in
-        let xt = externtype s in
-        Import (module_name, nm, xt) @@ region s l (pos s)
-      ) s
-    | Some 0x7e ->
-      skip 1 s;
+  match peek s with
+  | Some 0x7f when item_name = [] ->
+    skip 1 s;
+    vec (fun s ->
+      let l = pos s in
+      let nm = name s in
       let xt = externtype s in
-      vec (fun s ->
-        let l = pos s in
-        let nm = name s in
-        Import (module_name, nm, xt) @@ region s l (pos s)
-      ) s
-    | _ ->
-      let xt = externtype s in
-      [Import (module_name, item_name, xt) @@ region s left (pos s)]
-  else
+      Import (module_name, nm, xt) @@ region s l (pos s)
+    ) s
+  | Some 0x7e when item_name = [] ->
+    skip 1 s;
+    let xt = externtype s in
+    vec (fun s ->
+      let l = pos s in
+      let nm = name s in
+      Import (module_name, nm, xt) @@ region s l (pos s)
+    ) s
+  | _ ->
     let xt = externtype s in
     [Import (module_name, item_name, xt) @@ region s left (pos s)]
 
