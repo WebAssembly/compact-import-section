@@ -1283,7 +1283,6 @@ import :
   | LPAR IMPORT name compact_item2_list RPAR
     { fun c ->
       let (item_names, xt_fn) = $4 in
-      (* Apply the externtype once per item, to allocate one index each *)
       let dfs = List.map (fun _ -> xt_fn c false) item_names in
       fun () ->
         List.map2 (fun item_name df -> Import ($3, item_name, df ()) @@ $sloc)
