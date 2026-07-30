@@ -202,6 +202,9 @@ let bind_label (c : context) x = bind_rel "label" c.labels x
 let bind_field (c : context) x y =
   bind_abs "field" (Lib.List32.nth c.types.fields x) y
 
+let bind_if b f = if b then f else
+  fun _c x -> error x.at "identifier not allowed"
+
 let define_type (c : context) (ty : type_) =
   c.types.list <- c.types.list @ [ty]
 
@@ -1228,31 +1231,62 @@ table_fields :
 
 externtype :
   | LPAR FUNC bindidx_opt typeuse RPAR
-    { fun c -> ignore ($3 c anon_func bind_func);
+    { fun c b -> ignore ($3 c anon_func (bind_if b bind_func));
       fun () -> ExternFuncT (Idx ($4 c).it) }
   | LPAR TAG bindidx_opt typeuse RPAR
-    { fun c -> ignore ($3 c anon_tag bind_tag);
+    { fun c b -> ignore ($3 c anon_tag (bind_if b bind_tag));
       fun () -> ExternTagT (TagT (Idx ($4 c).it)) }
   | LPAR TAG bindidx_opt functype RPAR  /* Sugar */
-    { fun c -> ignore ($3 c anon_tag bind_tag);
+    { fun c b -> ignore ($3 c anon_tag (bind_if b bind_tag));
       fun () -> ExternTagT (TagT (Idx (inline_functype c ($4 c) $loc($4)).it)) }
   | LPAR GLOBAL bindidx_opt globaltype RPAR
-    { fun c -> ignore ($3 c anon_global bind_global);
+    { fun c b -> ignore ($3 c anon_global (bind_if b bind_global));
       fun () -> ExternGlobalT ($4 c) }
   | LPAR MEMORY bindidx_opt memorytype RPAR
-    { fun c -> ignore ($3 c anon_memory bind_memory);
+    { fun c b -> ignore ($3 c anon_memory (bind_if b bind_memory));
       fun () -> ExternMemoryT ($4 c) }
   | LPAR TABLE bindidx_opt tabletype RPAR
-    { fun c -> ignore ($3 c anon_table bind_table);
+    { fun c b -> ignore ($3 c anon_table (bind_if b bind_table));
       fun () -> ExternTableT ($4 c) }
   | LPAR FUNC bindidx_opt functype RPAR  /* Sugar */
-    { fun c -> ignore ($3 c anon_func bind_func);
+    { fun c b -> ignore ($3 c anon_func (bind_if b bind_func));
       fun () -> ExternFuncT (Idx (inline_functype c ($4 c) $loc($4)).it) }
+
+compact_item1 :
+  | LPAR ITEM name externtype RPAR
+    { fun c -> let df = $4 c true in
+      fun () -> ($3, df ()) }
+
+compact_item1_list :
+  | compact_item1
+    { fun c -> let f = $1 c in
+      fun () -> [f ()] }
+  | compact_item1 compact_item1_list
+    { fun c -> let f = $1 c in let fs = $2 c in
+      fun () -> f () :: fs () }
+
+compact_item2_list :
+  | LPAR ITEM name RPAR compact_item2_list
+    { let (item_names, xt_fn) = $5 in ($3 :: item_names, xt_fn) }
+  | externtype
+    { ([], $1) }
 
 import :
   | LPAR IMPORT name name externtype RPAR
-    { fun c -> let df = $5 c in
-      fun () -> Import ($3, $4, df ()) @@ $sloc }
+    { fun c -> let df = $5 c true in
+      fun () -> [Import ($3, $4, df ()) @@ $sloc] }
+  | LPAR IMPORT name compact_item1_list RPAR
+    { fun c -> let items = $4 c in
+      fun () ->
+        List.map (fun (item_name, xt) -> Import ($3, item_name, xt) @@ $sloc)
+          (items ()) }
+  | LPAR IMPORT name compact_item2_list RPAR
+    { fun c ->
+      let (item_names, xt_fn) = $4 in
+      let dfs = List.map (fun _ -> xt_fn c false) item_names in
+      fun () ->
+        List.map2 (fun item_name df -> Import ($3, item_name, df ()) @@ $sloc)
+          item_names dfs }
 
 inline_import :
   | LPAR IMPORT name name RPAR { $3, $4 }
@@ -1377,8 +1411,8 @@ module_fields1 :
   | import module_fields
     { fun c -> let imf = $1 c in let mff = $2 c in
       fun () -> let mf = mff () in
-      fun () -> let im = imf () in let m = mf () in
-      {m with imports = im :: m.imports} }
+      fun () -> let ims = imf () in let m = mf () in
+      {m with imports = ims @ m.imports} }
   | export module_fields
     { fun c -> let mff = $2 c in
       fun () -> let mf = mff () in
