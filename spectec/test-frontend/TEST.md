@@ -7474,13 +7474,13 @@ syntax decl =
 ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec
 rec {
 
-;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:258.1-258.76
+;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:267.1-267.76
 def $typesd(decl*) : type*
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:270.1-270.23
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:279.1-279.23
   def $typesd([]) = []
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:271.1-271.48
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:280.1-280.48
   def $typesd{type : type, `decl'*` : decl*}([(type : type <: decl)] ++ decl'*{decl' <- `decl'*`}) = [type] ++ $typesd(decl'*{decl' <- `decl'*`})
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:272.1-272.57
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:281.1-281.57
   def $typesd{decl : decl, `decl'*` : decl*}([decl] ++ decl'*{decl' <- `decl'*`}) = $typesd(decl'*{decl' <- `decl'*`})
     -- otherwise
 }
@@ -7488,13 +7488,13 @@ def $typesd(decl*) : type*
 ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec
 rec {
 
-;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:259.1-259.78
+;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:268.1-268.78
 def $importsd(decl*) : import*
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:274.1-274.25
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:283.1-283.25
   def $importsd([]) = []
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:275.1-275.56
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:284.1-284.56
   def $importsd{import : import, `decl'*` : decl*}([(import : import <: decl)] ++ decl'*{decl' <- `decl'*`}) = [import] ++ $importsd(decl'*{decl' <- `decl'*`})
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:276.1-276.61
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:285.1-285.61
   def $importsd{decl : decl, `decl'*` : decl*}([decl] ++ decl'*{decl' <- `decl'*`}) = $importsd(decl'*{decl' <- `decl'*`})
     -- otherwise
 }
@@ -7502,13 +7502,13 @@ def $importsd(decl*) : import*
 ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec
 rec {
 
-;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:260.1-260.75
+;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:269.1-269.75
 def $tagsd(decl*) : tag*
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:278.1-278.22
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:287.1-287.22
   def $tagsd([]) = []
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:279.1-279.44
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:288.1-288.44
   def $tagsd{tag : tag, `decl'*` : decl*}([(tag : tag <: decl)] ++ decl'*{decl' <- `decl'*`}) = [tag] ++ $tagsd(decl'*{decl' <- `decl'*`})
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:280.1-280.55
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:289.1-289.55
   def $tagsd{decl : decl, `decl'*` : decl*}([decl] ++ decl'*{decl' <- `decl'*`}) = $tagsd(decl'*{decl' <- `decl'*`})
     -- otherwise
 }
@@ -7516,13 +7516,13 @@ def $tagsd(decl*) : tag*
 ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec
 rec {
 
-;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:261.1-261.78
+;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:270.1-270.78
 def $globalsd(decl*) : global*
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:282.1-282.25
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:291.1-291.25
   def $globalsd([]) = []
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:283.1-283.56
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:292.1-292.56
   def $globalsd{global : global, `decl'*` : decl*}([(global : global <: decl)] ++ decl'*{decl' <- `decl'*`}) = [global] ++ $globalsd(decl'*{decl' <- `decl'*`})
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:284.1-284.61
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:293.1-293.61
   def $globalsd{decl : decl, `decl'*` : decl*}([decl] ++ decl'*{decl' <- `decl'*`}) = $globalsd(decl'*{decl' <- `decl'*`})
     -- otherwise
 }
@@ -7530,13 +7530,13 @@ def $globalsd(decl*) : global*
 ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec
 rec {
 
-;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:262.1-262.75
+;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:271.1-271.75
 def $memsd(decl*) : mem*
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:286.1-286.22
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:295.1-295.22
   def $memsd([]) = []
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:287.1-287.44
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:296.1-296.44
   def $memsd{mem : mem, `decl'*` : decl*}([(mem : mem <: decl)] ++ decl'*{decl' <- `decl'*`}) = [mem] ++ $memsd(decl'*{decl' <- `decl'*`})
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:288.1-288.55
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:297.1-297.55
   def $memsd{decl : decl, `decl'*` : decl*}([decl] ++ decl'*{decl' <- `decl'*`}) = $memsd(decl'*{decl' <- `decl'*`})
     -- otherwise
 }
@@ -7544,13 +7544,13 @@ def $memsd(decl*) : mem*
 ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec
 rec {
 
-;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:263.1-263.77
+;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:272.1-272.77
 def $tablesd(decl*) : table*
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:290.1-290.24
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:299.1-299.24
   def $tablesd([]) = []
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:291.1-291.52
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:300.1-300.52
   def $tablesd{table : table, `decl'*` : decl*}([(table : table <: decl)] ++ decl'*{decl' <- `decl'*`}) = [table] ++ $tablesd(decl'*{decl' <- `decl'*`})
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:292.1-292.59
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:301.1-301.59
   def $tablesd{decl : decl, `decl'*` : decl*}([decl] ++ decl'*{decl' <- `decl'*`}) = $tablesd(decl'*{decl' <- `decl'*`})
     -- otherwise
 }
@@ -7558,13 +7558,13 @@ def $tablesd(decl*) : table*
 ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec
 rec {
 
-;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:264.1-264.76
+;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:273.1-273.76
 def $funcsd(decl*) : func*
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:294.1-294.23
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:303.1-303.23
   def $funcsd([]) = []
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:295.1-295.48
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:304.1-304.48
   def $funcsd{func : func, `decl'*` : decl*}([(func : func <: decl)] ++ decl'*{decl' <- `decl'*`}) = [func] ++ $funcsd(decl'*{decl' <- `decl'*`})
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:296.1-296.57
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:305.1-305.57
   def $funcsd{decl : decl, `decl'*` : decl*}([decl] ++ decl'*{decl' <- `decl'*`}) = $funcsd(decl'*{decl' <- `decl'*`})
     -- otherwise
 }
@@ -7572,13 +7572,13 @@ def $funcsd(decl*) : func*
 ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec
 rec {
 
-;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:265.1-265.76
+;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:274.1-274.76
 def $datasd(decl*) : data*
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:298.1-298.23
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:307.1-307.23
   def $datasd([]) = []
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:299.1-299.48
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:308.1-308.48
   def $datasd{data : data, `decl'*` : decl*}([(data : data <: decl)] ++ decl'*{decl' <- `decl'*`}) = [data] ++ $datasd(decl'*{decl' <- `decl'*`})
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:300.1-300.57
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:309.1-309.57
   def $datasd{decl : decl, `decl'*` : decl*}([decl] ++ decl'*{decl' <- `decl'*`}) = $datasd(decl'*{decl' <- `decl'*`})
     -- otherwise
 }
@@ -7586,13 +7586,13 @@ def $datasd(decl*) : data*
 ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec
 rec {
 
-;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:266.1-266.76
+;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:275.1-275.76
 def $elemsd(decl*) : elem*
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:302.1-302.23
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:311.1-311.23
   def $elemsd([]) = []
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:303.1-303.48
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:312.1-312.48
   def $elemsd{elem : elem, `decl'*` : decl*}([(elem : elem <: decl)] ++ decl'*{decl' <- `decl'*`}) = [elem] ++ $elemsd(decl'*{decl' <- `decl'*`})
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:304.1-304.57
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:313.1-313.57
   def $elemsd{decl : decl, `decl'*` : decl*}([decl] ++ decl'*{decl' <- `decl'*`}) = $elemsd(decl'*{decl' <- `decl'*`})
     -- otherwise
 }
@@ -7600,13 +7600,13 @@ def $elemsd(decl*) : elem*
 ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec
 rec {
 
-;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:267.1-267.77
+;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:276.1-276.77
 def $startsd(decl*) : start*
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:306.1-306.24
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:315.1-315.24
   def $startsd([]) = []
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:307.1-307.52
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:316.1-316.52
   def $startsd{start : start, `decl'*` : decl*}([(start : start <: decl)] ++ decl'*{decl' <- `decl'*`}) = [start] ++ $startsd(decl'*{decl' <- `decl'*`})
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:308.1-308.59
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:317.1-317.59
   def $startsd{decl : decl, `decl'*` : decl*}([decl] ++ decl'*{decl' <- `decl'*`}) = $startsd(decl'*{decl' <- `decl'*`})
     -- otherwise
 }
@@ -7614,13 +7614,13 @@ def $startsd(decl*) : start*
 ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec
 rec {
 
-;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:268.1-268.78
+;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:277.1-277.78
 def $exportsd(decl*) : export*
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:310.1-310.25
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:319.1-319.25
   def $exportsd([]) = []
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:311.1-311.56
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:320.1-320.56
   def $exportsd{export : export, `decl'*` : decl*}([(export : export <: decl)] ++ decl'*{decl' <- `decl'*`}) = [export] ++ $exportsd(decl'*{decl' <- `decl'*`})
-  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:312.1-312.61
+  ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec:321.1-321.61
   def $exportsd{decl : decl, `decl'*` : decl*}([decl] ++ decl'*{decl' <- `decl'*`}) = $exportsd(decl'*{decl' <- `decl'*`})
     -- otherwise
 }
@@ -9170,14 +9170,25 @@ grammar Btypesec : type*
   prod{`ty*` : type*} ty*{ty <- `ty*`}:Bsection_(1, syntax type, grammar Blist(syntax type, grammar Btype)) => ty*{ty <- `ty*`}
 
 ;; ../../../../specification/wasm-latest/5.4-binary.modules.spectec
-grammar Bimport : import
+grammar Bimportitem : (name, externtype)
   ;; ../../../../specification/wasm-latest/5.4-binary.modules.spectec
-  prod{nm_1 : name, nm_2 : name, xt : externtype} {{nm_1:Bname} {nm_2:Bname} {xt:Bexterntype}} => IMPORT_import(nm_1, nm_2, xt)
+  prod{nm_2 : name, xt : externtype} {{nm_2:Bname} {xt:Bexterntype}} => (nm_2, xt)
+
+;; ../../../../specification/wasm-latest/5.4-binary.modules.spectec
+grammar Bimports : import*
+  ;; ../../../../specification/wasm-latest/5.4-binary.modules.spectec
+  prod{nm_1 : name, nm_2 : name, xt : externtype} {{nm_1:Bname} {nm_2:Bname} {xt:Bexterntype}} => [IMPORT_import(nm_1, nm_2, xt)]
+  ;; ../../../../specification/wasm-latest/5.4-binary.modules.spectec
+  prod{nm_1 : name, `nm_2*` : name*, `xt*` : externtype*, nm_e : name} {{nm_1:Bname} {nm_e:Bname} {0x7F} {(nm_2, xt)*{nm_2 <- `nm_2*`, xt <- `xt*`}:Blist(syntax (name, externtype), grammar Bimportitem)}} => IMPORT_import(nm_1, nm_2, xt)*{nm_2 <- `nm_2*`, xt <- `xt*`}
+    -- if (nm_e = `%`_name([]))
+  ;; ../../../../specification/wasm-latest/5.4-binary.modules.spectec
+  prod{nm_1 : name, xt : externtype, `nm_2*` : name*, nm_e : name} {{nm_1:Bname} {nm_e:Bname} {0x7E} {xt:Bexterntype} {nm_2*{nm_2 <- `nm_2*`}:Blist(syntax name, grammar Bname)}} => IMPORT_import(nm_1, nm_2, xt)*{nm_2 <- `nm_2*`}
+    -- if (nm_e = `%`_name([]))
 
 ;; ../../../../specification/wasm-latest/5.4-binary.modules.spectec
 grammar Bimportsec : import*
   ;; ../../../../specification/wasm-latest/5.4-binary.modules.spectec
-  prod{`im*` : import*} im*{im <- `im*`}:Bsection_(2, syntax import, grammar Blist(syntax import, grammar Bimport)) => im*{im <- `im*`}
+  prod{`im**` : import**} im*{im <- `im*`}*{`im*` <- `im**`}:Bsection_(2, syntax import*, grammar Blist(syntax import*, grammar Bimports)) => $concat_(syntax import, im*{im <- `im*`}*{`im*` <- `im**`})
 
 ;; ../../../../specification/wasm-latest/5.4-binary.modules.spectec
 grammar Bfuncsec : typeidx*
@@ -11258,6 +11269,9 @@ grammar Telem_(I : I) : (elem, idctxt)
 grammar Tstart_(I : I) : (start, idctxt)
   ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec
   prod{x : idx} {{"("} {"start"} {x:Tfuncidx_(I)} {")"}} => (START_start(x), {TYPES [], TAGS [], GLOBALS [], MEMS [], TABLES [], FUNCS [], DATAS [], ELEMS [], LOCALS [], LABELS [], FIELDS [], TYPEDEFS []})
+
+;; ../../../../specification/wasm-latest/6.4-text.modules.spectec
+grammar Timports_(I : I) : (import*, idctxt)
 
 ;; ../../../../specification/wasm-latest/6.4-text.modules.spectec
 grammar Timport_(I : I) : (import, idctxt)
