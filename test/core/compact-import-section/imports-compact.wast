@@ -97,6 +97,32 @@
 )
 
 
+;; Zero-length groups
+
+(module (import "not-test")) ;; encoding 1
+(module (import "not-test" (func))) ;; encoding 2
+
+(module
+  (import "test")
+  (import "test" (func (result i32)))                       ;; no func
+  (import "test" (item "func->11i" (func (result i32))))    ;; func 0
+  (import "test" (global i32))                              ;; no global
+  (import "test" (item "global->20") (global i32))          ;; global 0
+
+  (func (export "check") (result i32)
+    call 0
+    global.get 0
+    i32.add
+  )
+)
+(assert_return (invoke "check") (i32.const 31))
+
+(module
+  (import "not-test" (func (param i32)))  ;; still implicitly defines a func type
+  (func (type 0))
+)
+
+
 ;; Identifiers
 
 (module
@@ -119,7 +145,15 @@
 (assert_return (invoke "sum") (i32.const 32))
 
 (assert_malformed
+  (module quote "(import \"test\" (func $foo))")
+  "identifier not allowed"
+)
+(assert_malformed
   (module quote "(import \"test\" (item \"foo\") (func $foo))")
+  "identifier not allowed"
+)
+(assert_malformed
+  (module quote "(import \"test\" (item \"foo\") (item \"bar\") (func $foo))")
   "identifier not allowed"
 )
 

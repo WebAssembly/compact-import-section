@@ -133,6 +133,7 @@ let empty_context () =
     datas = empty (); elems = empty (); locals = empty (); labels = empty ();
     deferred_locals = ref []
   }
+let empty_context_with_types_from (c : context) = {(empty_context ()) with types = c.types}
 
 let enter_block (c : context) loc = {c with labels = scoped "label" 1l c.labels (at loc)}
 let enter_let (c : context) loc = {c with locals = empty (); deferred_locals = ref []}
@@ -1258,9 +1259,8 @@ compact_item1 :
       fun () -> ($3, df ()) }
 
 compact_item1_list :
-  | compact_item1
-    { fun c -> let f = $1 c in
-      fun () -> [f ()] }
+  | /* empty */
+    { fun _c -> fun () -> [] }
   | compact_item1 compact_item1_list
     { fun c -> let f = $1 c in let fs = $2 c in
       fun () -> f () :: fs () }
@@ -1283,8 +1283,13 @@ import :
   | LPAR IMPORT name compact_item2_list RPAR
     { fun c ->
       let (item_names, xt_fn) = $4 in
+      (* Run the externtype function once, even if there are zero items, to
+       * ensure it has no identifiers and to ensure that any implicit function
+       * types still get defined. *)
+      let df0 = xt_fn (empty_context_with_types_from c) false in
       let dfs = List.map (fun _ -> xt_fn c false) item_names in
       fun () ->
+        ignore (df0 ());
         List.map2 (fun item_name df -> Import ($3, item_name, df ()) @@ $sloc)
           item_names dfs }
 
