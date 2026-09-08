@@ -86,7 +86,7 @@ and t_exp' env = function
   | SliceE (exp1, exp2, exp3) -> SliceE (t_exp env exp1, t_exp env exp2, t_exp env exp3)
   | UpdE (exp1, path, exp2) -> UpdE (t_exp env exp1, t_path env path, t_exp env exp2)
   | ExtE (exp1, path, exp2) -> ExtE (t_exp env exp1, t_path env path, t_exp env exp2)
-  | StrE fields -> StrE (List.map (fun (a, e) -> a, t_exp env e) fields)
+  | StrE (fields, ch) -> StrE (List.map (fun (a, e) -> a, t_exp env e) fields, ch)
   | DotE (e, a) -> DotE (t_exp env e, a)
   | CompE (exp1, exp2) -> CompE (t_exp env exp1, t_exp env exp2)
   | LenE exp -> LenE (t_exp env exp)
@@ -102,7 +102,7 @@ and t_exp' env = function
   | LiftE exp -> LiftE (t_exp env exp)
   | CatE (exp1, exp2) -> CatE (t_exp env exp1, t_exp env exp2)
   | MemE (exp1, exp2) -> MemE (t_exp env exp1, t_exp env exp2)
-  | CaseE (mixop, e) -> CaseE (mixop, t_exp env e)
+  | CaseE (mixop, e, ch) -> CaseE (mixop, t_exp env e, ch)
   | CvtE (exp, t1, t2) -> CvtE (t_exp env exp, t1, t2)
   | SubE (exp, t1, t2) -> SubE (t_exp env exp, t_typ env t1, t_typ env t2)
 
@@ -154,7 +154,7 @@ and t_params env = List.map (t_param env)
 and t_prem' env = function
   | RulePr (id, args, mixop, exp) -> RulePr (id, t_args env args, mixop, t_exp env exp)
   | IfPr e -> IfPr (t_exp env e)
-  | LetPr (e1, e2, ids) -> LetPr (t_exp env e1, t_exp env e2, ids)
+  | LetPr (qs, e1, e2) -> LetPr (t_params env qs, t_exp env e1, t_exp env e2)
   | ElsePr -> ElsePr
   | IterPr (prem, iterexp) -> IterPr (t_prem env prem, t_iterexp env iterexp)
 

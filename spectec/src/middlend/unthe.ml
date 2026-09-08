@@ -133,7 +133,7 @@ and t_exp' n e : eqns * exp' =
   | OptE (Some exp) -> t_e n exp (fun exp' -> OptE (Some exp'))
   | TheE exp -> t_e n exp (fun exp' -> TheE exp')
   | LiftE exp -> t_e n exp (fun exp' -> LiftE exp')
-  | CaseE (mixop, exp) -> t_e n exp (fun exp' -> CaseE (mixop, exp'))
+  | CaseE (mixop, exp, ch) -> t_e n exp (fun exp' -> CaseE (mixop, exp', ch))
   | CvtE (exp, a, b) -> t_e n exp (fun exp' -> CvtE (exp', a, b))
   | SubE (exp, a, b) -> t_e n exp (fun exp' -> SubE (exp', a, b))
 
@@ -149,7 +149,7 @@ and t_exp' n e : eqns * exp' =
   | UpdE (exp1, path, exp2) -> t_epe n (exp1, path, exp2) (fun (e1', p', e2') -> UpdE (e1', p', e2'))
   | ExtE (exp1, path, exp2) -> t_epe n (exp1, path, exp2) (fun (e1', p', e2') -> ExtE (e1', p', e2'))
 
-  | StrE fields -> t_list t_field n fields (fun fields' -> StrE fields')
+  | StrE (fields, ch) -> t_list t_field n fields (fun fields' -> StrE (fields', ch))
 
   | TupE es -> t_list t_exp n es (fun es' -> TupE es')
   | ListE es -> t_list t_exp n es (fun es' -> ListE es')
@@ -198,7 +198,7 @@ and t_prem' n prem : eqns * prem' =
   match prem with
   | RulePr (a, args, b, exp) -> binary (fun n x -> t_list t_arg n x Fun.id) t_exp n (args, exp) (fun (args', exp') -> RulePr (a, args', b, exp'))
   | IfPr e -> unary t_exp n e (fun e' -> IfPr e')
-  | LetPr (e1, e2, ids) -> binary t_exp t_exp n (e1, e2) (fun (e1', e2') -> LetPr (e1', e2', ids))
+  | LetPr (qs, e1, e2) -> binary t_exp t_exp n (e1, e2) (fun (e1', e2') -> LetPr (qs, e1', e2'))
   | ElsePr -> [], prem
   | IterPr (prem, iterexp) ->
     let eqns1, prem' = t_prem n prem in

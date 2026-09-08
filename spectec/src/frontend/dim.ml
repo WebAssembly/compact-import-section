@@ -201,10 +201,10 @@ and check_exp dims ctx e =
   | ListE es
   | TupE es ->
     List.iter (check_exp dims ctx) es
-  | StrE efs ->
+  | StrE (efs, _) ->
     List.iter (check_expfield dims ctx) efs
   | DotE (e1, _)
-  | CaseE (_, e1)
+  | CaseE (_, e1, _)
   | UncaseE (e1, _) ->
     check_exp dims ctx e1
   | CallE (_, as_) ->
@@ -260,7 +260,8 @@ and check_prem dims ctx prem =
     check_exp dims ctx e
   | IfPr e -> check_exp dims ctx e
   | ElsePr -> ()
-  | LetPr (e1, e2, _xs) ->
+  | LetPr (qs, e1, e2) ->
+    List.iter (check_param dims) qs;
     check_exp dims ctx e1;
     check_exp dims ctx e2
   | IterPr (prem1, ite) ->
@@ -429,7 +430,9 @@ and annot_iterexp side dims occur1 (it, xes) at : iterexp * occur =
     List.filter_map (fun (x, (t, its)) ->
       match its with
       | [] -> None
-      | it::its' -> Some (x, (annot_varid' x it, (IterT (t, it) $ at, its')))
+      | it::its' ->
+        let it' = match it with Opt -> Opt | _ -> List in
+        Some (x, (annot_varid' x it, (IterT (t, it') $ at, its')))
     ) (Map.bindings occur1)
   in
   List.iter (fun (x, _) -> assert (not (Map.mem x.it dims))) xes;
@@ -513,9 +516,9 @@ and annot_exp side dims e : exp * occur =
       let p', occur2 = annot_path dims p in
       let e2', occur3 = annot_exp side dims e2 in
       ExtE (e1', p', e2'), union (union occur1 occur2) occur3
-    | StrE efs ->
+    | StrE (efs, ch) ->
       let efs', occurs = List.split (List.map (annot_expfield side dims) efs) in
-      StrE efs', List.fold_left union Map.empty occurs
+      StrE (efs', ch), List.fold_left union Map.empty occurs
     | DotE (e1, atom) ->
       let e1', occur1 = annot_exp side dims e1 in
       DotE (e1', atom), occur1
@@ -564,9 +567,9 @@ and annot_exp side dims e : exp * occur =
       let e1', occur1 = annot_exp side dims e1 in
       let e2', occur2 = annot_exp side dims e2 in
       CatE (e1', e2'), union occur1 occur2
-    | CaseE (atom, e1) ->
+    | CaseE (atom, e1, ch) ->
       let e1', occur1 = annot_exp side dims e1 in
-      CaseE (atom, e1'), occur1
+      CaseE (atom, e1', ch), occur1
     | CvtE (e1, nt1, nt2) ->
       let e1', occur1 = annot_exp side dims e1 in
       CvtE (e1', nt1, nt2), occur1
@@ -678,10 +681,11 @@ and annot_prem dims prem : prem * occur =
     | IfPr e ->
       let e', occur = annot_exp `Rhs dims e in
       IfPr e', occur
-    | LetPr (e1, e2, ids) ->
+    | LetPr (qs, e1, e2) ->
+      let qs', occurs = List.split (List.map (annot_param dims) qs) in
       let e1', occur1 = annot_exp `Lhs dims e1 in
       let e2', occur2 = annot_exp `Rhs dims e2 in
-      LetPr (e1', e2', ids), union occur1 occur2
+      LetPr (qs', e1', e2'), List.fold_left union (union occur1 occur2) occurs
     | ElsePr ->
       ElsePr, Map.empty
     | IterPr (prem1, iter) ->

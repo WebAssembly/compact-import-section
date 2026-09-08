@@ -1084,6 +1084,8 @@ Printf.eprintf "[render_atom %s @ %s] id=%s def=%s macros: %s (%s)\n%!"
           | Sup -> "\\geq"
           | SqArrow | SqArrowSub -> "\\hookrightarrow"
           | SqArrowStar | SqArrowStarSub -> "\\hookrightarrow^\\ast"
+          | Prec | PrecSub -> "\\prec"
+          | Succ | SuccSub -> "\\succ"
           | Cat -> "\\oplus"
           | Bar -> "\\mid"
           | BigAnd -> "\\bigwedge"
@@ -1349,9 +1351,17 @@ and render_exp env e =
   | MemE (e1, e2) -> render_exp env e1 ^ " \\in " ^ render_exp env e2
   | LenE e1 -> "{|" ^ render_exp env e1 ^ "|}"
   | SizeE id -> "||" ^ render_gramid env id ^ "||"
-  | ParenE ({it = SeqE [{it = AtomE atom; _}; _]; _} as e1)
-    when render_atom env atom = "" ->
-    render_exp env e1
+  | ParenE ({it = SeqE (_::_::_ as es); _} as e1) ->
+    let es', _ = Lib.List.split_last es in
+    if
+      List.for_all (function
+        | {it = AtomE atom; _} -> render_atom env atom = ""
+        | _ -> false
+      ) es'
+    then
+      render_exp env e1
+    else
+      "(" ^ render_exp env e1 ^ ")"
   | ParenE e1 -> "(" ^ render_exp env e1 ^ ")"
   | TupE es -> "(" ^ render_exps ", " env es ^ ")"
   | InfixE (e1, atom, e2) ->
@@ -1702,6 +1712,8 @@ let () = render_args_fwd := render_args
 
 let merge_typ t1 t2 =
   match t1.it, t2.it with
+  | StrT (dots1, ids1, fields1, _), StrT (_, ids2, fields2, dots2) ->
+    StrT (dots1, ids1 @ strip_nl ids2, fields1 @ strip_nl fields2, dots2) $ t1.at
   | CaseT (dots1, ids1, cases1, _), CaseT (_, ids2, cases2, dots2) ->
     CaseT (dots1, ids1 @ strip_nl ids2, cases1 @ strip_nl cases2, dots2) $ t1.at
   | _, _ -> assert false

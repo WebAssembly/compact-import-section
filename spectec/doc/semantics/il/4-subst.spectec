@@ -107,12 +107,38 @@ def $refresh_exppulls(ep*) = (ep', $composesubsts(s*))
   -- (if (ep', s) = $refresh_exppull(ep))*
 
 
+def $refresh_exppush(exppush) : (exppush, subst)
+def $refresh_exppushs(exppush*) : (exppush*, subst)
+
+def $refresh_exppush(e `-> x `: t) = (e `-> x' `: t, s)
+  -- if (x', s) = $refresh_expid(x)
+
+def $refresh_exppushs(eq*) = (eq', $composesubsts(s*))
+  -- (if (eq', s) = $refresh_exppush(eq))*
+
+
 def $refresh_iter(iter) : (iter, subst)
 
 def $refresh_iter(QUEST) = (QUEST, {})
 def $refresh_iter(STAR) = (STAR, {})
 def $refresh_iter(PLUS) = (PLUS, {})
-def $refresh_iter(SUP x e) = (SUP x' e, s) -- if (x', s) = $refresh_expid(x)
+def $refresh_iter(SUP x e) = (SUP x' e, s)
+  -- if (x', s) = $refresh_expid(x)
+
+
+def $refresh_prem(prem) : (prem, subst)
+def $refresh_prems(prem*) : (prem*, subst)
+
+def $refresh_prem(REL x a* `: e) = (REL x a* `: e, {})
+def $refresh_prem(IF e) = (IF e, {})
+def $refresh_prem(ELSE) = (ELSE, {})
+def $refresh_prem(LET `{q*} e_1 `= e_2) = (LET `{q'*} $subst_exp(s, e_1) `= e_2, s)
+  -- if (q'*, s) = $refresh_params(q*)
+def $refresh_prem(ITER pr it ep* eq*) = (ITER pr it ep* eq'*, s)
+  -- if (eq'*, s) = $refresh_exppushs(eq*)
+
+def $refresh_prems(pr*) =
+  $refresh_list(prem, $refresh_prem, $subst_prem, pr*)
 
 
 ;; Lists
@@ -142,12 +168,8 @@ def $subst_typ(s, MATCH x a* WITH inst*) = MATCH x $subst_arg(s, a)*  WITH $subs
 
 def $subst_deftyp(subst, deftyp) : deftyp
 def $subst_deftyp(s, ALIAS t) = ALIAS $subst_typ(s, t)
-def $subst_deftyp(s, STRUCT (a `: t `- `{q*} pr*)*) = STRUCT (a `: $subst_typ(s, t') `- `{$subst_param(s ++ s', q')*} $subst_prem(s ++ s' ++ s'', pr)*)*
-  -- if (t', s') = $refresh_typ(t)
-  -- if (q'*, s'') = $refresh_params(q*)
-def $subst_deftyp(s, VARIANT (m `: t `- `{q*} pr*)*) = VARIANT (m `: $subst_typ(s, t') `- `{$subst_param(s ++ s', q')*} $subst_prem(s ++ s' ++ s'', pr)*)*
-  -- if (t', s') = $refresh_typ(t)
-  -- if (q'*, s'') = $refresh_params(q*)
+def $subst_deftyp(s, STRUCT (a `: tpr)*) = STRUCT (a `: $subst_typprems(s, tpr))*
+def $subst_deftyp(s, VARIANT (m `: tpr)*) = VARIANT (m `: $subst_typprems(s, tpr))*
 
 def $subst_typbind(subst, typbind) : typbind
 def $subst_typbind(s, x `: t) = x' `: $subst_typ(s, t)
@@ -164,6 +186,9 @@ def $subst_iter(s, SUP x e) = SUP x $subst_exp(s, e)
 def $subst_exppull(subst, exppull) : exppull
 def $subst_exppull(s, x `: t `<- e') = x `: $subst_typ(s, t) `<- $subst_exp(s, e')
 
+def $subst_exppush(subst, exppush) : exppush
+def $subst_exppush(s, e' `-> x `: t) = $subst_exp(s, e') `-> x `: $subst_typ(s, t)
+
 
 ;; Expressions
 
@@ -177,11 +202,11 @@ def $subst_exp(s, UN op e) = UN op $subst_exp(s, e)
 def $subst_exp(s, BIN op e_1 e_2) = BIN op $subst_exp(s, e_1) $subst_exp(s, e_2)
 def $subst_exp(s, CMP op e_1 e_2) = CMP op $subst_exp(s, e_1) $subst_exp(s, e_2)
 def $subst_exp(s, TUP e*) = TUP $subst_exp(s, e)*
-def $subst_exp(s, INJ m e) = INJ m $subst_exp(s, e)
+def $subst_exp(s, INJ t m e `- qpr?) = INJ $subst_typ(s, t) m $subst_exp(s, e) `- $subst_quantprems(s, qpr)?
 def $subst_exp(s, OPT e?) = OPT $subst_exp(s, e)?
 def $subst_exp(s, LIST e*) = LIST $subst_exp(s, e)*
 def $subst_exp(s, LIFT e) = LIFT $subst_exp(s, e)
-def $subst_exp(s, STR (a `= e)*) = STR (a `= $subst_exp(s, e))*
+def $subst_exp(s, STR t (a `= e `- qpr?)*) = STR $subst_typ(s, t) (a `= $subst_exp(s, e) `- $subst_quantprems(s, qpr)?)*
 def $subst_exp(s, SEL e n) = SEL $subst_exp(s, e) n
 def $subst_exp(s, LEN e) = LEN $subst_exp(s, e)
 def $subst_exp(s, MEM e_1 e_2) = MEM $subst_exp(s, e_1) $subst_exp(s, e_2)
@@ -223,7 +248,7 @@ def $subst_sym(s, ITER g it ep*) = ITER $subst_sym(s ++ s' ++ s'', g) $subst_ite
   -- if (ep'*, s'') = $refresh_exppulls(ep*)
 
 
-;; Definitions
+;; Arguments and Parameters
 
 def $subst_arg(subst, arg) : arg
 def $subst_arg(s, TYP t) = TYP $subst_typ(s, t)
@@ -239,30 +264,52 @@ def $subst_param(s, FUN x `: p* `-> t) = FUN x `: $subst_param(s, p')* `-> $subs
 def $subst_param(s, GRAM x `: p* `-> t) = GRAM x `: $subst_param(s, p')* `-> $subst_typ(s ++ s', t)
   -- if (p'*, s') = $refresh_params(p*)
 
+
+;; Premises
+
 def $subst_prem(subst, prem) : prem
 def $subst_prem(s, REL x a* `: e) = REL x $subst_arg(s, a)* `: $subst_exp(s, e)
 def $subst_prem(s, IF e) = IF $subst_exp(s, e)
 def $subst_prem(s, ELSE) = ELSE
-def $subst_prem(s, LET e_1 `= e_2) = LET $subst_exp(s, e_1) `= $subst_exp(s, e_2)
-def $subst_prem(s, ITER pr it ep*) = ITER $subst_prem(s ++ s' ++ s'', pr) $subst_iter(s, it') $subst_exppull(s, ep')*
+def $subst_prem(s, LET `{q*} e_1 `= e_2) = LET `{$subst_param(s, q)*} $subst_exp(s, e_1) `= $subst_exp(s, e_2)
+  ;; Assume: q* fresh (from caller $subst_typprems, $subst_expprems)
+def $subst_prem(s, ITER pr it ep* eq*) = ITER $subst_prem(s ++ s' ++ s'', pr') $subst_iter(s, it') $subst_exppull(s, ep')* $subst_exppush(s ++ s''', eq')*
+  ;; Assume: eq* fresh (from caller $subst_typprems, $subst_expprems)
   -- if (it', s') = $refresh_iter(it)
   -- if (ep'*, s'') = $refresh_exppulls(ep*)
+  -- if (pr', s''') = $refresh_prem(pr)
 
+def $subst_quantprems(subst, quantprems) : quantprems
+def $subst_quantprems(s, `{q*} pr*) = `{$subst_param(s, q')*} $subst_prem(s ++ s', pr)*
+  -- if (q'*, s') = $refresh_params(q*)
+
+def $subst_typprems(subst, typprems) : typprems
+def $subst_typprems(s, t `- `{q*} pr*) = $subst_typ(s, t') `- `{$subst_param(s ++ s', q')*} $subst_prem(s ++ s' ++ s'', pr')*
+  -- if (t', s') = $refresh_typ(t)
+  -- if (q'*, s'') = $refresh_params(q*)
+  -- if (pr'*, s''') = $refresh_prems(pr*)
+
+def $subst_expprems(subst, expprems) : expprems
+def $subst_expprems(s, e `- pr*) = $subst_exp(s ++ s', e) `- $subst_prem(s, pr)*
+  -- if (pr'*, s') = $refresh_prems(pr*)
+
+
+;; Definitions
 
 def $subst_inst(subst, inst) : inst
-def $subst_inst(s, INST `{q*} a* `= dt) = INST `{$subst_param(s, q')*} $subst_arg(s ++ s', a)* `= $subst_deftyp(s ++ s', dt)
+def $subst_inst(s, INST `{q*} a* `=> dt) = INST `{$subst_param(s, q')*} $subst_arg(s ++ s', a)* `=> $subst_deftyp(s ++ s', dt)
   -- if (q'*, s') = $refresh_params(q*)
 
 def $subst_rule(subst, rul) : rul
-def $subst_rule(s, RULE `{q*} e `- pr*) = RULE `{$subst_param(s, q')*} $subst_exp(s ++ s', e) `- $subst_prem(s ++ s', pr)*
+def $subst_rule(s, RULE `{q*} epr) = RULE `{$subst_param(s, q')*} $subst_expprems(s ++ s', epr)
   -- if (q'*, s') = $refresh_params(q*)
 
 def $subst_clause(subst, clause) : clause
-def $subst_clause(s, CLAUSE `{q*} a* `= e `- pr*) = CLAUSE `{$subst_param(s, q')*} $subst_arg(s ++ s', a)* `= $subst_exp(s ++ s', e) `- $subst_prem(s ++ s', pr)*
+def $subst_clause(s, CLAUSE `{q*} a* `=> epr) = CLAUSE `{$subst_param(s, q')*} $subst_arg(s ++ s', a)* `=> $subst_expprems(s ++ s', epr)
   -- if (q'*, s') = $refresh_params(q*)
 
 def $subst_prod(subst, prod) : prod
-def $subst_prod(s, PROD `{q*} g `=> e `- pr*) = PROD `{$subst_param(s, q')*} $subst_sym(s ++ s', g) `=> $subst_exp(s ++ s', e) `- $subst_prem(s ++ s', pr)*
+def $subst_prod(s, PROD `{q*} g `=> epr) = PROD `{$subst_param(s, q')*} $subst_sym(s ++ s', g) `=> $subst_expprems(s ++ s', epr)
   -- if (q'*, s') = $refresh_params(q*)
 
 
@@ -278,6 +325,11 @@ def $args_for_params(arg*, param*) : subst
 def $args_for_params(eps, eps) = {}
 def $args_for_params(a_1 a*, p_1 p*) = s ++ $args_for_params(a*, $subst_param(s, p)*)
   -- if s = $arg_for_param(a_1, p_1)
+
+
+def $tupsubst(exp, typ) : subst
+def $tupsubst(e, TUP (x `: t)^n) = {EXP (x, SEL e i)^(i<n)}
+def $tupsubst(e, t) = {}  -- otherwise
 
 
 ;; Well-formedness

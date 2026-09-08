@@ -13,9 +13,9 @@ syntax pack_(Pnn) = iN($psizenn(Pnn))
 syntax lane_(lanetype)
 syntax lane_(numtype) = num_(numtype)
 syntax lane_(packtype) = pack_(packtype)
-syntax lane_(Jnn) = iN($lsize(Jnn))  ;; HACK
+syntax lane_(Jnn) = iN($lsizenn(Jnn))  ;; HACK
 
-syntax vec_(Vnn) = vN($vsize(Vnn))
+syntax vec_(Vnn) = vN($vsizenn(Vnn))
 
 syntax lit_(storagetype)
 syntax lit_(numtype) = num_(numtype)
@@ -74,15 +74,16 @@ syntax dim hint(desc "dimension") = `1 | `2 | `4 | `8 | `16
 syntax shape hint(desc "shape") = lanetype X dim  hint(show %0#X#%2) hint(macro "%shape")
   -- if $($lsize(lanetype) * dim = 128)
 
+syntax M hint(macro none) = dim
 
 def $dim(shape) : dim  hint(macro "shdim")
-def $dim(Lnn X N) = N
+def $dim(Lnn X M) = M
 
 def $lanetype(shape) : lanetype  hint(macro "shlanetype")
-def $lanetype(Lnn X N) = Lnn
+def $lanetype(Lnn X M) = Lnn
 
 def $unpackshape(shape) : numtype  hint(show $unpack(%))
-def $unpackshape(Lnn X N) = $lunpack(Lnn)
+def $unpackshape(Lnn X M) = $lunpack(Lnn)
 
 
 syntax ishape hint(desc "integer shape") = shape -- if $lanetype(shape) = Jnn
@@ -324,8 +325,8 @@ syntax instr/i31 hint(desc "scalar reference instruction") = ...
 syntax instr/struct hint(desc "structure reference instruction") = ...
   | STRUCT.NEW typeidx
   | STRUCT.NEW_DEFAULT typeidx
-  | STRUCT.GET sx? typeidx u32      hint(show STRUCT.GET#_#% % %)
-  | STRUCT.SET typeidx u32
+  | STRUCT.GET sx? typeidx fieldidx      hint(show STRUCT.GET#_#% % %)
+  | STRUCT.SET typeidx fieldidx
   | ...
 
 syntax instr/array hint(desc "array reference instruction") = ...
